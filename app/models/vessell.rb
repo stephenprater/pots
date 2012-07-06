@@ -5,39 +5,41 @@ class Vessell < ActiveRecord::Base
      :cultural_affliation, :appendages, :weight, :volume, :description, :comments
 
   #type variety
-  has_many :vessell_types
-  has_many :types, :through => :vessell_types
-  has_many :varieties, :through => :types
+  has_many :vessell_type_varieties
+  has_many :types, :through => :vessell_type_varieties, :as => :typology
+  has_many :varieties, :through => :vessell_type_varieties, :as => :varieity
 
   #element, motif, design
   has_many :vessell_designs
-  has_many :designs, :through => :vessell_designs
-  has_many :vessell_motifs, :through => :vessell_designs
-  has_many :motifs, :through => :vessell_motifs
-  has_many :vessell_elements, :through => :vessell_motifs
-  has_many :elements, :through => :vessell_elements
-
-  #effigies
-  has_many :vessell_effigies
-  has_many :effigies, :through => :vessell_effigies
-
+  has_many :compositions, :through => :vessell_designs, :as => :composition
+  has_many :motifs, :through => :vessell_designs, :as => :motifs
+  has_many :elements, :through => :vessell_designs, :as => :elements
+  
   #i think maybe this is wrong
   has_one :design_structure
 
+  #effigies
+  has_many :vessell_attachments
+  has_many :effigies, :through => :vessell_attachments, :as => :attachment
+  has_many :appendages, :through => :vessell_attachments, :as => :attachment
+
+  #simplification tables.
+  #it's functionally equivalent to fuckton of columns
   has_one :base_attributes
   has_one :body_attributes
   has_one :handle_attributes
   has_one :lip_attributes
   has_one :neck_attributes
   has_one :rim_attributes
+  #each one of these has a surface treatment, some techinques
 
   has_many :photographs
-
-  belongs_to :site
-  has_one :county, :through => :site
-
-  has_many :colors, :class_name => 'VessellColor'
+  has_many :vessell_citations
+  has_many :citations, :through => :vessell_citations, :order => 'order ASC'
 
   #two conditional colors on 'interior' and 'exterior'
+  has_many :colors, :class_name => 'VessellColor'
 
+  belongs_to :site
+  belongs_to :county
 end

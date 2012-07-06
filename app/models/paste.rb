@@ -1,5 +1,5 @@
 class Paste < ActiveRecord::Base
-  attr_accessible :type, :compaction, :hardness, :smoothness
+  attr_accessible :type
 
-  has_many :vessell_attributes
+  has_many :vessell_attributes_pastes
 end

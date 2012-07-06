@@ -5,13 +5,14 @@ class CreateBodyAttributes < ActiveRecord::Migration
       t.string :form
       t.string :shape
       t.string :mode
+      t.text :decoration
 
       #metrics
       t.float :height
       t.float :diameter
       t.float :thickness
 
-      t.timestamps
+      t.references :vessell
     end
   end
 end

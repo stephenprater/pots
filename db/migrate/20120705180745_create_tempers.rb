@@ -1,6 +1,6 @@
-class CreateTypes < ActiveRecord::Migration
+class CreateTemper < ActiveRecord::Migration
   def change
-    create_table :types do |t|
+    create_table :tempers do |t|
       t.string :description
 
       t.timestamps

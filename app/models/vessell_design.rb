@@ -1,11 +1,8 @@
-class VessellDesigns < ActiveRecord::Base
+class VessellDesign < ActiveRecord::Base
   attr_accessible :area
 
   belongs_to :vessell
-  belongs_to :design
-
-  has_many :vessell_motifs
-  has_many :motifs, :through => :vessell_motifs
+  belongs_to :design, :polymorphic => true
 
   has_many :area_techniques, :as => :area
   has_many :techinques, :through => :area_techniques

@@ -3,19 +3,17 @@ class CreateRimAttributes < ActiveRecord::Migration
     create_table :rim_attributes do |t|
       #description
       t.string :shape
-      t.string :angle
       t.string :mode
       t.boolean :continuous_profile
+      t.text :decoration
 
       #metrics
       t.float :height
       t.float :diameter
       t.float :thickness
-
-      t.references :surface_treatment
+      t.float :angle
+      
       t.references :vessell
-
-      t.timestamps
     end
   end
 end

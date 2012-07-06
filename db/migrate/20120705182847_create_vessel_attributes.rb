@@ -5,8 +5,6 @@ class CreateVesselAttributes < ActiveRecord::Migration
       t.string :shape
       t.boolean :carinated_vessell
       t.boolean :effigy_vessell
-
-
       
       #metrics 
       t.float :height
@@ -15,8 +13,6 @@ class CreateVesselAttributes < ActiveRecord::Migration
 
       #paste
       t.reference :paste
-
-      t.timestamps
     end
   end
 end

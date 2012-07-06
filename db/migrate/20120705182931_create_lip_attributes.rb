@@ -3,12 +3,12 @@ class CreateLipAttributes < ActiveRecord::Migration
     create_table :lip_attributes do |t|
       #description
       t.string :shape
+      t.text :decoration
 
       #metrics
       t.float :thickness
 
       #relationship
-      t.reference :surface_treatment
       t.reference :vessell
     end
   end

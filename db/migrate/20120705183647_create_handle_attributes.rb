@@ -9,8 +9,6 @@ class CreateHandleAttributes < ActiveRecord::Migration
       #nometrics for handle
 
       t.reference :vessell
-
-      t.timestamps
     end
   end
 end
