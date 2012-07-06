@@ -2,7 +2,7 @@ class CreateVessellAttributesPastes < ActiveRecord::Migration
   def change
     create_table :vessell_attributes_pastes do |t|
       t.references :vessell_attributes
-      t.reference :paste
+      t.references :paste
       t.string :compaction
       t.string :hardness
       t.string :smoothness

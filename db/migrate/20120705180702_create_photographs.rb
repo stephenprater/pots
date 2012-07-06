@@ -6,7 +6,7 @@ class CreatePhotographs < ActiveRecord::Migration
       t.string :photographer
       t.string :photo_number
 
-      t.reference :vessell
+      t.references :vessell
 
       t.timestamps
     end

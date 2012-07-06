@@ -8,7 +8,7 @@ class CreateHandleAttributes < ActiveRecord::Migration
 
       #nometrics for handle
 
-      t.reference :vessell
+      t.references :vessell
     end
   end
 end

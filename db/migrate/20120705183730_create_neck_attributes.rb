@@ -12,7 +12,7 @@ class CreateNeckAttributes < ActiveRecord::Migration
       t.float :mid_exterior_diameter
       t.float :base_exterior_diameter
 
-      t.reference :vessell
+      t.references :vessell
     end
   end
 end

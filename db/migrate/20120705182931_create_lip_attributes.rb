@@ -9,7 +9,7 @@ class CreateLipAttributes < ActiveRecord::Migration
       t.float :thickness
 
       #relationship
-      t.reference :vessell
+      t.references :vessell
     end
   end
 end

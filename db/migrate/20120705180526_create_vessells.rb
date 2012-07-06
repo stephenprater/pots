@@ -34,8 +34,8 @@ class CreateVessells < ActiveRecord::Migration
       t.text :photos_in_publication
       t.text :collegiate_pattern
 
-      t.reference :county
-      t.reference :site
+      t.references :county
+      t.references :site
 
       t.timestamps
     end

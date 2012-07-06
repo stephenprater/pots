@@ -7,8 +7,8 @@ class CreateVesselTempers < ActiveRecord::Migration
       t.string :grit_type
       t.string :observation_method
        
-      t.reference :vessel_attributes
-      t.reference :temper
+      t.references :vessel_attributes
+      t.references :temper
     end
   end
 end

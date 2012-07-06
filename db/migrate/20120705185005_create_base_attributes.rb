@@ -10,8 +10,6 @@ class CreateBaseAttributes < ActiveRecord::Migration
       t.float :diameter_at_bottom
 
       t.references :vessell
-
-      t.timestamps
     end
   end
 end

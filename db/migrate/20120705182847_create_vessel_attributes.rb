@@ -12,7 +12,7 @@ class CreateVesselAttributes < ActiveRecord::Migration
       t.string :max_diameter_at
 
       #paste
-      t.reference :paste
+      t.references :paste
     end
   end
 end
