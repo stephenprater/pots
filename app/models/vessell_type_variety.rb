@@ -1,4 +1,4 @@
-class VesselTypeVariety < ActiveRecord::Base
+class VessellTypeVariety < ActiveRecord::Base
   belongs_to :vessell
   belongs_to :type_variety, :polymorphic => true
 end

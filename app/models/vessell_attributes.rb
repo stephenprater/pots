@@ -1,4 +1,4 @@
-class VesselAttributes < ActiveRecord::Base
+class VessellAttributes < ActiveRecord::Base
   attr_accessible :shape, :carinated_vessell, :effigy_vessell, :height,
     :max_diameter, :max_diameter_at
 

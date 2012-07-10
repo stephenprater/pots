@@ -1,3 +1,4 @@
 class VessellColor < ActiveRecord::Base
-  attr_accessible :color, :location
+  # attr_accessible :title, :body
+
 end

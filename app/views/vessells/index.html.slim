@@ -1,0 +1,28 @@
+- content_for :header do
+  h1 Vessells
+
+h2 Vessells
+
+ul.tabs
+  li.active
+    =link_to "Index", "#"
+  li
+    =link_to "New Vessell", new_vessell_path
+  li
+    a rel="twispy" title="search accession number"
+      =autocomplete_field_tag 'accession_number','', autocomplete_vessell_accession_number_vessells_path
+  
+div.span16#vessells_pagination
+  = will_remote_paginate @vessells, :href => vessells_path
+
+
+table#vessells class="bordered-table zebra-striped"
+  thead
+    th accession number
+    th description
+    th controls
+  
+  tbody.content
+    == render 'vessells'
+
+

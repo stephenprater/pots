@@ -1,0 +1,12 @@
+-@vessells.each do |vessell|
+  tr id="vessell_#{vessell.id}" class="vessell"
+    td.accession_number
+      =link_to vessell.accession_number, vessell_path(vessell)
+    td.description
+      = vessell.description
+
+    td.controls 
+      = link_to "edit", edit_vessell_path(vessell), :class => 'btn mini icon edit'
+      = link_to "delete", vessell_path(vessell), :method => :delete,
+        :confirm => 'Really Delete?', :class => 'btn mini icon remove'
+

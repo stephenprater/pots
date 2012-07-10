@@ -21,7 +21,23 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
+group :test, :development do
+  gem 'pry'
+  gem 'pry-rails'
+end
+
 gem 'jquery-rails'
+
+gem 'simple_form'
+gem 'slim'
+gem 'will_paginate'
+gem 'rails3-jquery-autocomplete'
+gem 'twitter-bootstrap-rails'
+gem 'jquery-ui-bootstrap-rails'
+
+gem 'js-routes'
+
+gem 'squeel'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
@@ -30,6 +46,7 @@ gem 'jquery-rails'
 # gem 'jbuilder'
 
 # Use unicorn as the app server
+gem 'thin'
 # gem 'unicorn'
 
 # Deploy with Capistrano

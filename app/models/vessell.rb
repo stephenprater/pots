@@ -31,6 +31,7 @@ class Vessell < ActiveRecord::Base
   has_one :lip_attributes
   has_one :neck_attributes
   has_one :rim_attributes
+  has_one :vessell_attributes
   #each one of these has a surface treatment, some techinques
 
   has_many :photographs
@@ -38,7 +39,8 @@ class Vessell < ActiveRecord::Base
   has_many :citations, :through => :vessell_citations, :order => 'order ASC'
 
   #two conditional colors on 'interior' and 'exterior'
-  has_many :colors, :class_name => 'VessellColor'
+  has_many :vessell_colors
+  has_many :colors, :through => :vessell_colors
 
   belongs_to :site
   belongs_to :county

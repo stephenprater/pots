@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120706204032) do
+ActiveRecord::Schema.define(:version => 20120710182303) do
 
   create_table "appendages", :force => true do |t|
     t.string   "description"
@@ -19,11 +19,9 @@ ActiveRecord::Schema.define(:version => 20120706204032) do
   end
 
   create_table "area_techniques", :force => true do |t|
-    t.integer  "area_id"
-    t.string   "area_type"
-    t.integer  "techinque_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.integer "area_id"
+    t.string  "area_type"
+    t.integer "techinque_id"
   end
 
   create_table "base_attributes", :force => true do |t|
@@ -168,7 +166,9 @@ ActiveRecord::Schema.define(:version => 20120706204032) do
   end
 
   create_table "techniques", :force => true do |t|
-    t.string "name"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "tempers", :force => true do |t|
@@ -190,45 +190,41 @@ ActiveRecord::Schema.define(:version => 20120706204032) do
     t.datetime "updated_at",    :null => false
   end
 
-  create_table "vessel_attributes", :force => true do |t|
+  create_table "vessell_attachments", :force => true do |t|
+    t.string  "location"
+    t.integer "vessell_id"
+    t.integer "attachment_id"
+    t.string  "attachment_type"
+  end
+
+  create_table "vessell_attributes", :force => true do |t|
     t.string  "shape"
     t.boolean "carinated_vessell"
     t.boolean "effigy_vessell"
     t.float   "height"
     t.float   "max_diameter"
     t.string  "max_diameter_at"
-    t.integer "paste_id"
+    t.integer "vessell_id"
   end
 
-  create_table "vessel_attributes_tempers", :force => true do |t|
+  create_table "vessell_attributes_pastes", :force => true do |t|
+    t.integer "vessell_attributes_id"
+    t.integer "paste_id"
+    t.string  "compaction"
+    t.string  "hardness"
+    t.string  "smoothness"
+  end
+
+  add_index "vessell_attributes_pastes", ["vessell_attributes_id"], :name => "index_vessell_attributes_pastes_on_vessell_attributes_id"
+
+  create_table "vessell_attributes_tempers", :force => true do |t|
     t.string  "size"
     t.string  "abundance"
     t.string  "grit_type"
     t.string  "observation_method"
-    t.integer "vessel_attributes_id"
+    t.integer "vessell_attributes_id"
     t.integer "temper_id"
   end
-
-  create_table "vessell_attachments", :force => true do |t|
-    t.string   "location"
-    t.integer  "vessell_id"
-    t.integer  "attachment_id"
-    t.string   "attachment_type"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
-  end
-
-  create_table "vessell_attributes_pastes", :force => true do |t|
-    t.integer  "vessell_attributes_id"
-    t.integer  "paste_id"
-    t.string   "compaction"
-    t.string   "hardness"
-    t.string   "smoothness"
-    t.datetime "created_at",            :null => false
-    t.datetime "updated_at",            :null => false
-  end
-
-  add_index "vessell_attributes_pastes", ["vessell_attributes_id"], :name => "index_vessell_attributes_pastes_on_vessell_attributes_id"
 
   create_table "vessell_citations", :force => true do |t|
     t.integer "vessell_id"
@@ -242,6 +238,7 @@ ActiveRecord::Schema.define(:version => 20120706204032) do
   create_table "vessell_colors", :force => true do |t|
     t.string  "location"
     t.integer "color_id"
+    t.integer "vessell_id"
   end
 
   create_table "vessell_designs", :force => true do |t|
@@ -260,7 +257,7 @@ ActiveRecord::Schema.define(:version => 20120706204032) do
   add_index "vessell_surface_treatments", ["surface_treatement_id"], :name => "index_vessell_surface_treatments_on_surface_treatement_id"
   add_index "vessell_surface_treatments", ["vessell_id"], :name => "index_vessell_surface_treatments_on_vessell_id"
 
-  create_table "vessell_type_variety", :force => true do |t|
+  create_table "vessell_type_varieties", :force => true do |t|
     t.integer "vessell_id"
     t.integer "type_variety_id"
     t.string  "type_variety_type"

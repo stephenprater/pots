@@ -1,4 +1,4 @@
-class Type < ActiveRecord::Base
+class Typology < ActiveRecord::Base
   attr_accessible :description
 
   has_many :varieties

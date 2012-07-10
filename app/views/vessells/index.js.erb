@@ -1,0 +1,7 @@
+<% fields = render 'vessells' %>
+<% pagination = capture do -%>
+  <%= will_remote_paginate @vessells, :href => @url_opts %>
+<% end %>
+
+$('table#vessells tbody.content').html('<%= escape_javascript fields %>')
+$('div#vessells_pagination').html('<%= escape_javascript pagination %>')
