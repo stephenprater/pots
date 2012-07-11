@@ -1,4 +1,11 @@
 $ ->
+  $("a[rel=popover]").popover()
+  $(".tooltip").tooltip()
+  $("a[rel=tooltip]").tooltip()
+  $("input.datepicker").datepicker()
+
+
+$ ->
   Array::remove = (e)-> @[t..t] = [] if(t = @indexOf(e)) > -1
 
   class Search

@@ -1,13 +1,9 @@
-module SimpleForm
-  module Inputs
-    class DatePickerInput < Base
-      def input
-        @builder.text_field(attribute_name, input_html_options.merge(datepicker_options(object.send(attribute_name))))
-      end
+class DatePickerInput < SimpleForm::Inputs::StringInput
+  def input
+    value = object.send(attribute_name) if object.respond_to? attribute_name
+    input_html_options[:value] ||= I18n.localize(value) if value.present?
+    input_html_classes << "datepicker"
 
-      def datepicker_options value = nil
-        datepicker_options = { :value => value.nil? ? nil : I18n.localize(value) }
-      end
-    end
+    super
   end
 end

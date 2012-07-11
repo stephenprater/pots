@@ -1,7 +1,7 @@
-=simple_form_for @vessell do |f|
+=simple_form_for @vessell, :defaults => { :input_html => {:class => 'input-xlarge span5'}}, :html => { :class => 'form-horizontal'} do |f|
 
   =f.input :accession_number
-  =f.input :form_date, :class => 'datepicker'
+  =f.input :form_date, :as => 'date_picker'
   =f.input :vessell_number
   =f.input :project_name
   =f.input :collection
@@ -19,5 +19,4 @@
   =f.input :volume
   =f.input :description
   =f.input :comments
-
 

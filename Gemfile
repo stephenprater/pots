@@ -31,9 +31,8 @@ gem 'jquery-rails'
 gem 'simple_form'
 gem 'slim'
 gem 'will_paginate'
+gem 'bootstrap-sass-rails'
 gem 'rails3-jquery-autocomplete'
-gem 'twitter-bootstrap-rails'
-gem 'jquery-ui-bootstrap-rails'
 
 gem 'js-routes'
 

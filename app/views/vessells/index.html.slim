@@ -3,7 +3,7 @@
 
 h2 Vessells
 
-ul.tabs
+ul.nav-tabs
   li.active
     =link_to "Index", "#"
   li
@@ -16,7 +16,7 @@ div.span16#vessells_pagination
   = will_remote_paginate @vessells, :href => vessells_path
 
 
-table#vessells class="bordered-table zebra-striped"
+table#vessells class="table-bordered table-striped"
   thead
     th accession number
     th description

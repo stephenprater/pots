@@ -1,0 +1,6 @@
+@import "twitter/bootstrap";
+
+input[type="date_picker"] {
+  @extend input[type="text"];
+}
+
