@@ -1,0 +1,5 @@
+<% form = capture do  %>
+  <%= render 'form' %>
+<% end -%>
+
+$('#new_site').toggle().html('<%= escape_javascript form %>');

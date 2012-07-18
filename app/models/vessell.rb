@@ -44,4 +44,7 @@ class Vessell < ActiveRecord::Base
 
   belongs_to :site
   belongs_to :county
+
+  accepts_nested_attributes_for :site
+
 end

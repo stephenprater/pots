@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120710182303) do
+ActiveRecord::Schema.define(:version => 20120717215429) do
 
   create_table "appendages", :force => true do |t|
     t.string   "description"
@@ -70,8 +71,9 @@ ActiveRecord::Schema.define(:version => 20120710182303) do
 
   create_table "counties", :force => true do |t|
     t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.string   "abbreviation"
   end
 
   create_table "design_structures", :force => true do |t|
@@ -154,9 +156,9 @@ ActiveRecord::Schema.define(:version => 20120710182303) do
     t.integer  "county_id"
     t.text     "description"
     t.string   "site_number"
-    t.string   "amasda_record"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.string   "name"
   end
 
   create_table "surface_treatments", :force => true do |t|

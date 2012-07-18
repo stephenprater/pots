@@ -21,17 +21,20 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
+gem 'andand'
+
 group :test, :development do
   gem 'pry'
   gem 'pry-rails'
+  gem 'debugger'
 end
 
 gem 'jquery-rails'
 
-gem 'simple_form'
+gem 'simple_form', :git => 'git://github.com/stephenprater/simple_form', :branch => 'classes_on_use'
 gem 'slim'
 gem 'will_paginate'
-gem 'bootstrap-sass-rails'
+gem 'bootstrap-sass-rails', :git => 'git://github.com/stephenprater/bootstrap-sass-rails', :branch => 'quoting_fix'
 gem 'rails3-jquery-autocomplete'
 
 gem 'js-routes'

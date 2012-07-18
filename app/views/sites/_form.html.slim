@@ -1,0 +1,5 @@
+=simple_fields_for @site, :wrapper => :bootstrap_inline do |f|
+  =f.input :name
+  =f.input :site_number
+  =f.input :description
+  =f.input :county, :url => autocomplete_country_name_counties_path, :as => 'autocomplete'

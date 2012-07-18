@@ -1,0 +1,7 @@
+<% form = capture do %>
+  <% fields_for "counties[#{@index}]" do |f| %>
+    <%= render :partial => 'field', :locals => { :f => f} %>
+  <% end -%>
+<% end -%>
+
+$('#counties tbody.content').append('<%= escape_javascript form %>');

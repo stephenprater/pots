@@ -18,6 +18,14 @@ Pots::Application.routes.draw do
     get :autocomplete_vessell_accession_number, :on => :collection
   end
 
+  resources :counties, :only => [:index, :new] do
+    post :create_or_update, :on => :collection, :path => "", :as => nil
+  end
+
+  resources :sites, :only => [:new] do
+    get :autocomplete_site_name, :on => :collection
+  end
+
   # Sample resource route with options:
   #   resources :products do
   #     member do

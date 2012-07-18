@@ -1,0 +1,18 @@
+= if @errors 
+  = if @errors[f.object]
+    - @errors[f.object].each_pair do |k,v|
+      td colspan=3 
+        strong
+          = k
+        = v
+
+  - field_errors = @errors[f.object] ? @errors[f.object].keys : []
+- field_errors ||= []
+tr
+ td
+   =f.text_field :abbreviation, :maxlength => 2, :class => ("error" if field_errors.include? :abbreviation)
+   =f.hidden_field :id
+ td
+   =f.text_field :name, :class => ("error" if field_errors.include? :name)
+ td
+   =f.check_box :_destroy, :class => 'destroy'

@@ -3,7 +3,7 @@
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 #
 $ ->
-  vessell_search = Search.new('#vessells', Routes.vessells_path())
+  vessell_search = new Search('#vessells', Routes.vessells_path())
   vessell_search.reset()
 
   $('#vessell_accession_number').bind('railsAutocomplete.select', (obj,data)->

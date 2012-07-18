@@ -1,0 +1,28 @@
+- content_for :header do
+  h1 Counties
+
+- if @errors.andand.any?
+  div#error_explanation
+    h2 
+     | "#{pluralize(@errors.count, "error")} prohibited these changes from being saved:
+     
+
+= form_tag do |counties|      
+  = hidden_field_tag form_authenticity_token, :authenticity_token
+  table#counties.table-bordered.table-striped
+    thead
+      th 
+        | abbreviation 
+      th 
+        | name
+      th 
+        | delete
+    tbody.content
+      - @counties.each_with_index do |county,idx|
+        = fields_for "counties[#{idx}]", county do |f|
+          = render partial: 'field', locals: { f: f }
+      = fields_for "counties[#{SecureRandom.uuid}]" do |f|
+        = render partial: 'field', locals: { f: f }
+  div.actions
+    = submit_tag
+
