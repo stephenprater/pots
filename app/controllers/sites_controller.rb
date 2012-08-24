@@ -1,9 +1,20 @@
 class SitesController < ApplicationController
   respond_to :js
 
-  autocomplete :site, :name
+  def autocomplete_site_name
+    term = params[:term]
+    results = Site.select(:name).select(:id).select(:name).where { (name.matches "%#{term}%") }.limit(10)
+    res = results.collect do |r|
+      {:id => r.id, :label => r.name}
+    end
+    res << {:id => 0, :label => 'New'}
+    render :json => res
+  end
+ 
 
   def new
-    render
+    @site = Site.new do |s|
+      s.name = params[:name]
+    end
   end
 end

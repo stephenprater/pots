@@ -68,6 +68,31 @@ SimpleForm.setup do |config|
     end
   end
 
+  config.wrappers :bootstrap_well, :tag => 'div',
+    :class => ['control-group','form-horizontal'], :error_class => 'error' do |b|
+    b.use :html5
+    b.use :placeholder
+    b.use :label, :class => 'well-label', :wrap_with => { :tag => false }
+    b.wrapper :tag => 'div', :class => ['controls','form-inline','sub-form'] do |ba|
+      ba.use :input, :class => ['span1', 'input-span'], :wrap_with => { :tag => false }
+    end
+  end
+
+
+  config.wrappers :bootstrap_inline, :tag => false,
+    :class => ['form-inline'], :error_class => 'error' do |b|
+    b.use :html5
+    b.use :placeholder
+    b.use :input, :class => ['span2','input-span'], :wrap_with => { :tag => false }
+  end
+
+  config.wrappers :bootstrap_inline_wide, :tag => false,
+    :class => ['form-inline'], :error_class => 'error' do |b|
+    b.use :html5
+    b.use :placeholder
+    b.use :input, :class => ['input-full-width'], :wrap_with => { :tag => false }
+  end
+
   config.wrappers :prepend, :tag => 'div', :class => "control-group", :error_class => 'error' do |b|
     b.use :html5
     b.use :placeholder

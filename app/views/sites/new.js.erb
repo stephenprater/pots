@@ -2,4 +2,8 @@
   <%= render 'form' %>
 <% end -%>
 
-$('#new_site').toggle().html('<%= escape_javascript form %>');
+$('#vessell_site').parents('.control-group').html('<%= escape_javascript form %>');
+$('#vessell_site_name').focus();
+var val = $('#vessell_site_name').val();
+$('#vessell_site_name').val('');
+$('#vessell_site_name').val(val);

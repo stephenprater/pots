@@ -16,3 +16,11 @@ $ ->
       event.preventDefault()
       $.ajax(vessell_search.to_s(), dataType: 'script')
   true
+
+  $('#vessell_site').bind('railsAutocomplete.beforeSelect', (obj,data) ->
+      $(this).attr('data-entered-value', $(this).val())
+  )
+  $('#vessell_site').bind('railsAutocomplete.select', (obj,data) ->
+    if data.item.id == 0
+      $.ajax(Routes.new_site_path({ name: $(this).attr('data-entered-value') }), datatype: 'script')
+  )

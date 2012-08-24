@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120717215429) do
+ActiveRecord::Schema.define(:version => 20120823222824) do
 
   create_table "appendages", :force => true do |t|
     t.string   "description"
@@ -105,6 +105,14 @@ ActiveRecord::Schema.define(:version => 20120717215429) do
     t.text    "decoration"
     t.float   "thickness"
     t.integer "vessell_id"
+  end
+
+  create_table "lookup_attributes", :force => true do |t|
+    t.string   "value"
+    t.string   "type"
+    t.integer  "lookup_attribute_vessell_id"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
   end
 
   create_table "motifs", :force => true do |t|
@@ -247,6 +255,11 @@ ActiveRecord::Schema.define(:version => 20120717215429) do
     t.integer "vessell_id"
     t.integer "design_id"
     t.string  "design_type"
+  end
+
+  create_table "vessell_lookup_attributes", :force => true do |t|
+    t.integer "lookup_attribute_id"
+    t.integer "vessell_id"
   end
 
   create_table "vessell_surface_treatments", :force => true do |t|

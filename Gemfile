@@ -34,8 +34,9 @@ gem 'jquery-rails'
 gem 'simple_form', :git => 'git://github.com/stephenprater/simple_form', :branch => 'classes_on_use'
 gem 'slim'
 gem 'will_paginate'
-gem 'bootstrap-sass-rails', :git => 'git://github.com/stephenprater/bootstrap-sass-rails', :branch => 'quoting_fix'
+gem 'bootstrap-sass-rails', :git => 'git://github.com/yabawock/bootstrap-sass-rails'
 gem 'rails3-jquery-autocomplete'
+gem 'default_value_for'
 
 gem 'js-routes'
 

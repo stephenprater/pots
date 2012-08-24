@@ -1,3 +1,31 @@
 // Place all the styles related to the Vessell controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+//
+
+@import "twitter/bootstrap/mixins";
+@import "twitter/bootstrap/variables";
+@import "twitter/bootstrap/forms";
+
+.input-span {
+  margin: {
+    left: ($gridGutterWidth / 2) !important; 
+    top: ($gridGutterWidth / 2) !important;
+  }
+}
+
+.input-full-width {
+  display: block !important;
+  margin: ($gridGutterWidth /2) auto !important;
+  width: 427px;
+}
+
+.sub-form {
+  @extend .span6;
+  @include border-radius(4px);
+  background-color: $grayLighter;
+  border: 1px solid #DDDDDD;
+  margin: 14px 0;
+  float: none;
+}
+

@@ -3,6 +3,8 @@ class CountiesController < ApplicationController
 
   respond_to :html, :except => :new
   respond_to :js, :only => :new
+
+  autocomplete :county, :name
  
   def index
     @counties = County.all

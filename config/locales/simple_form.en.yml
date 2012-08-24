@@ -19,6 +19,13 @@ en:
     #       email: 'E-mail to sign in.'
     #     edit:
     #       email: 'E-mail.'
+    placeholders:
+      site:
+        site_name: "Site Name"
+        site_number: "Site Number"
+        county: "County Name"
+        description: "Brief Site Description"
+
     # hints:
     #   defaults:
     #     username: 'User name to sign in.'

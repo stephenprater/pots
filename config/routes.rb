@@ -16,10 +16,15 @@ Pots::Application.routes.draw do
   #
   resources :vessells do
     get :autocomplete_vessell_accession_number, :on => :collection
+    get :autocomplete_collection, :on => :collection
+    get :autocomplete_analyst, :on => :collection
+    get :autocomplete_project_name, :on => :collection
+    get :autocomplete_cultural_affliation, :on => :collection
   end
 
   resources :counties, :only => [:index, :new] do
     post :create_or_update, :on => :collection, :path => "", :as => nil
+    get :autocomplete_county_name, :on => :collection
   end
 
   resources :sites, :only => [:new] do

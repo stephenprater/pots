@@ -1,25 +1,46 @@
 =simple_form_for @vessell, :wrapper => :bootstrap_wide do |f| 
 
-  =f.input :site, :url => autocomplete_site_name_sites_path, :as => 'autocomplete'
-  div#new_site.hidden
-
+  =f.input :site, :url => autocomplete_site_name_sites_path, 
+    :as => 'autocomplete', :input_html => { :"data-id-element" => 'site_id' }
+  =f.input :site_id, :as => :hidden
+  // unique
   =f.input :accession_number
-  =f.input :form_date, :as => 'date_picker'
+  =f.input :form_date, :as => 'date_picker', :input_html => { :value => l(f.object.form_date, :format => :picker) }
+  // unique
   =f.input :vessell_number
-  =f.input :project_name
-  =f.input :collection
-  =f.input :analyst
+  // lookup
+  =f.input :project_name, :url => autocomplete_project_name_vessells_path, :as => 'autocomplete'
+  // lookup
+  =f.input :collection, :url => autocomplete_collection_vessells_path, :as => 'autocomplete'
+  // lookup
+  =f.input :analyst, :url => autocomplete_analyst_vessells_path, :as => 'autocomplete'
+  // unique?
   =f.input :feature_number
+  // unique?
   =f.input :burial_number
+  // textual
   =f.input :other_catalog_information
-  =f.input :unit_of_measurement
-  =f.input :authenticity
-  =f.input :condition
+  // radio_boxes 
+  =f.input :unit_of_measurement, :as => 'radio_buttons', :collection => Vessell.units, :wrapper => 'bootstrap_well'
+  // checkboxes
+  =f.input :authenticity, :as => 'radio_buttons', :collection => Vessell.authenticity, :wrapper => 'bootstrap_well'
+  // checkboxes
+  =f.input :condition, :as => 'radio_buttons', :collection => Vessell.condition, :wrapper => 'bootstrap_well'
+  // text
   =f.input :missing_portions
+  // ?
   =f.input :use_wear
-  =f.input :cultural_affliation
+  // lookup
+  =f.input :cultural_affliation, :url => autocomplete_cultural_affliation_vessells_path, :as => 'autocomplete'
+  // unique
   =f.input :weight
+  // unique
   =f.input :volume
+  // unique
   =f.input :description
+  // unique
   =f.input :comments
+
+  /go!
+  =f.button :submit
 
