@@ -25,8 +25,9 @@ gem 'andand'
 
 group :test, :development do
   gem 'pry'
+  gem 'pry-debugger'
+  gem 'pry-stack_explorer'
   gem 'pry-rails'
-  gem 'debugger'
 end
 
 gem 'jquery-rails'

@@ -1,19 +1,17 @@
 =simple_form_for @vessell, :wrapper => :bootstrap_wide do |f| 
 
-  =f.input :site, :url => autocomplete_site_name_sites_path, 
-    :as => 'autocomplete', :input_html => { :"data-id-element" => 'site_id' }
-  =f.input :site_id, :as => :hidden
+  =f.input :site, :autocomplete_on => 'name', :as => 'autocomplete_association'
   // unique
   =f.input :accession_number
   =f.input :form_date, :as => 'date_picker', :input_html => { :value => l(f.object.form_date, :format => :picker) }
   // unique
   =f.input :vessell_number
   // lookup
-  =f.input :project_name, :url => autocomplete_project_name_vessells_path, :as => 'autocomplete'
+  =f.input :project_name, :as => 'autocomplete_association'
   // lookup
-  =f.input :collection, :url => autocomplete_collection_vessells_path, :as => 'autocomplete'
+  =f.input :collection, :as => 'autocomplete_association'
   // lookup
-  =f.input :analyst, :url => autocomplete_analyst_vessells_path, :as => 'autocomplete'
+  =f.input :analyst, :as => 'autocomplete_association'
   // unique?
   =f.input :feature_number
   // unique?

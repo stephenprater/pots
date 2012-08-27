@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/stephenprater/simple_form
-  revision: 9c82be693485c8cb72e51f2d409231da9001929c
+  revision: 8957072063e82a8d6cfa9b7125fabed39fcf7c29
   branch: classes_on_use
   specs:
     simple_form (2.0.2)
@@ -9,9 +9,9 @@ GIT
 
 GIT
   remote: git://github.com/yabawock/bootstrap-sass-rails
-  revision: e5ae46fc3fd9d2bc6f959bc943e1a2f4db71b847
+  revision: 9f911ef7744947579ae5a52370302c371989c2fb
   specs:
-    bootstrap-sass-rails (2.1.0.0pre1)
+    bootstrap-sass-rails (2.1.0.0)
       rails (~> 3.1)
       sass-rails (~> 3.1)
 
@@ -47,6 +47,7 @@ GEM
       multi_json (~> 1.0)
     andand (1.3.3)
     arel (3.0.2)
+    binding_of_caller (0.6.7)
     builder (3.0.0)
     coderay (1.0.7)
     coffee-rails (3.2.2)
@@ -58,7 +59,7 @@ GEM
     coffee-script-source (1.3.3)
     columnize (0.3.6)
     daemons (1.1.9)
-    debugger (1.2.0)
+    debugger (1.1.4)
       columnize (>= 0.3.1)
       debugger-linecache (~> 1.1.1)
       debugger-ruby_core_source (~> 1.1.3)
@@ -94,8 +95,13 @@ GEM
       coderay (~> 1.0.5)
       method_source (~> 0.8)
       slop (~> 3.3.1)
+    pry-debugger (0.2.0)
+      debugger (~> 1.1.3)
+      pry (~> 0.9.9)
     pry-rails (0.2.1)
       pry (>= 0.9.10)
+    pry-stack_explorer (0.4.5)
+      binding_of_caller (~> 0.6.2)
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -163,14 +169,15 @@ DEPENDENCIES
   andand
   bootstrap-sass-rails!
   coffee-rails (~> 3.2.1)
-  debugger
   default_value_for
   jquery-rails
   js-routes
   json
   pg
   pry
+  pry-debugger
   pry-rails
+  pry-stack_explorer
   rails (= 3.2.6)
   rails3-jquery-autocomplete
   sass-rails (~> 3.2.3)

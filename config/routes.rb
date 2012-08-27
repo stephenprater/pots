@@ -16,6 +16,9 @@ Pots::Application.routes.draw do
   #
   resources :vessells do
     get :autocomplete_vessell_accession_number, :on => :collection
+  end
+
+  resources :lookup_attributes, :only => [] do
     get :autocomplete_collection, :on => :collection
     get :autocomplete_analyst, :on => :collection
     get :autocomplete_project_name, :on => :collection
