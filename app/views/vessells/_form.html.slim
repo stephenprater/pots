@@ -1,4 +1,6 @@
-=simple_form_for @vessell, :wrapper => :bootstrap_wide do |f| 
+=simple_form_for @vessell, :wrapper => :bootstrap_wide do |f|
+
+  -f.object.project_names.new( :value => 'test' )
 
   =f.input :site, :autocomplete_on => 'name', :as => 'autocomplete_association'
   // unique
@@ -6,12 +8,15 @@
   =f.input :form_date, :as => 'date_picker', :input_html => { :value => l(f.object.form_date, :format => :picker) }
   // unique
   =f.input :vessell_number
+
+  =f.association :project_names, :as => 'autocomplete_association', :url => autocomplete_project_name_lookup_attributes_path
+
   // lookup
-  =f.input :project_name, :as => 'autocomplete_association'
-  // lookup
-  =f.input :collection, :as => 'autocomplete_association'
-  // lookup
-  =f.input :analyst, :as => 'autocomplete_association'
+  //=f.input :project_names, :as => 'autocomplete_association', :url => autocomplete_project_name_lookup_attributes_path
+  //// lookup
+  //=f.input :collections, :as => 'autocomplete_association', :url => autocomplete_collection_lookup_attributes_path
+  //// lookup
+  //=f.input :analysts, :as => 'autocomplete_association', :url => autocomplete_analyst_lookup_attributes_path
   // unique?
   =f.input :feature_number
   // unique?
@@ -29,7 +34,7 @@
   // ?
   =f.input :use_wear
   // lookup
-  =f.input :cultural_affliation, :url => autocomplete_cultural_affliation_vessells_path, :as => 'autocomplete'
+  =f.input :cultural_affliations, :as => 'autocomplete_association', :url => autocomplete_cultural_affliation_lookup_attributes_path
   // unique
   =f.input :weight
   // unique

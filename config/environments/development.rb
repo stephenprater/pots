@@ -37,4 +37,9 @@ Pots::Application.configure do
 
   config.sass.line_comments = false
   config.sass.debug_info = true
+
+  config.to_prepare do 
+    load File.expand_path(Pots::Application.root + 'config/initializers/simple_form.rb')
+  end
 end
+

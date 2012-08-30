@@ -36,10 +36,27 @@ class Vessell < ActiveRecord::Base
 
   has_many :vessell_lookup_attributes
   
-  has_many :analyst, :through => :vessell_lookup_attributes, :source => :lookup_attribute
-  has_many :project_name, :through => :vessell_lookup_attributes, :source => :lookup_attribute
-  has_many :collection, :through => :vessell_lookup_attributes, :source => :lookup_attribute
-  has_many :cultural_affliation, :through => :vessell_lookup_attributes, :source => :lookup_attribute
+  has_many :analysts, 
+    :through => :vessell_lookup_attributes, 
+    :source => :lookup_attribute,
+    :class_name => 'Analyst'
+  has_many :cultural_affliations,
+    :through => :vessell_lookup_attributes, 
+    :source => :lookup_attribute,
+    :class_name => 'CulturalAffliation'
+ 
+  #these really need to be has_one, but that's 
+  #impossible - how to fix?
+  has_many :collections,
+    :through => :vessell_lookup_attributes,
+    :source => :lookup_attribute,
+    :class_name => 'Collection'
+  has_many :project_names, 
+    :through => :vessell_lookup_attributes,
+    :source => :lookup_attribute,
+    :class_name => 'ProjectName'
+
+  accepts_nested_attributes_for :analysts, :cultural_affliations, :collections, :project_names
 
 
   #type variety
@@ -81,7 +98,7 @@ class Vessell < ActiveRecord::Base
   has_many :colors, :through => :vessell_colors
 
   belongs_to :site
-  belongs_to :county
+  has_one :county, :through => :site
 
   accepts_nested_attributes_for :site
 end

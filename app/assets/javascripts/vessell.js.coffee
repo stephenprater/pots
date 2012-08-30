@@ -6,6 +6,8 @@ $ ->
   vessell_search = new Search('#vessells', Routes.vessells_path())
   vessell_search.reset()
 
+  #perhaps - disable the enter key on everything but the last form element?
+
   $('#vessell_accession_number').bind('railsAutocomplete.select', (obj,data)->
     vessell_search.add_params(product_search:$(this.val()))
     $.ajax(vessell_search.to_s(), dataType: 'script')
@@ -17,10 +19,16 @@ $ ->
       $.ajax(vessell_search.to_s(), dataType: 'script')
   true
 
-  $('#vessell_site').bind('railsAutocomplete.beforeSelect', (obj,data) ->
+  $('input[data-association]').bind('railsAutocomplete.beforeSelect', (obj,data) ->
       $(this).attr('data-entered-value', $(this).val())
   )
-  $('#vessell_site').bind('railsAutocomplete.select', (obj,data) ->
-    if data.item.id == 0
-      $.ajax(Routes.new_site_path({ name: $(this).attr('data-entered-value') }), datatype: 'script')
+  
+  $('input[data-association]').keypress (event)->
+    if event.which == 13
+      debugger
+      event.preventDefault()
+
+  $('input[data-association]').bind('railsAutocomplete.select', (obj,data) ->
+    inputs = $(this).closest('form').find(':tabbable')
+    inputs.eq(inputs.index(this) + 1 ).focus()
   )

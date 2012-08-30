@@ -32,7 +32,7 @@ end
 
 gem 'jquery-rails'
 
-gem 'simple_form', :git => 'git://github.com/stephenprater/simple_form', :branch => 'classes_on_use'
+gem 'simple_form', :path => '/Users/stephenprater/Documents/personal/simple_form', :branch => 'classes_on_use'
 gem 'slim'
 gem 'will_paginate'
 gem 'bootstrap-sass-rails', :git => 'git://github.com/yabawock/bootstrap-sass-rails'

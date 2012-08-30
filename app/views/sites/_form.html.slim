@@ -5,8 +5,6 @@ div.controls.sub-form.form-inline.span6
     =v.simple_fields_for @site, :wrapper => :bootstrap_inline do |f|
         =f.input :name
         =f.input :site_number 
-        =f.input :county, :url => autocomplete_county_name_counties_path, 
-          :as => 'autocomplete', :input_html => { :"data-id-element" => 'vessell_site_county_id'}
-        =f.input :county_id, :as => :hidden
+        =f.input :county, :autocomplete_on => 'name', :as => 'autocomplete_association'
         =f.input :description,
           :wrapper => :bootstrap_inline_wide, :input_html => { :rows => 2 } 

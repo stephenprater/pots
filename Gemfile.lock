@@ -1,19 +1,17 @@
 GIT
-  remote: git://github.com/stephenprater/simple_form
-  revision: 8957072063e82a8d6cfa9b7125fabed39fcf7c29
-  branch: classes_on_use
-  specs:
-    simple_form (2.0.2)
-      actionpack (~> 3.0)
-      activemodel (~> 3.0)
-
-GIT
   remote: git://github.com/yabawock/bootstrap-sass-rails
   revision: 9f911ef7744947579ae5a52370302c371989c2fb
   specs:
     bootstrap-sass-rails (2.1.0.0)
       rails (~> 3.1)
       sass-rails (~> 3.1)
+
+PATH
+  remote: /Users/stephenprater/Documents/personal/simple_form
+  specs:
+    simple_form (2.0.2)
+      actionpack (~> 3.0)
+      activemodel (~> 3.0)
 
 GEM
   remote: https://rubygems.org/
