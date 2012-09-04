@@ -2,7 +2,8 @@
 
   -f.object.project_names.new( :value => 'test' )
 
-  =f.input :site, :autocomplete_on => 'name', :as => 'autocomplete_association'
+  =f.association :site, :autocomplete_on => 'name', :as => 'autocomplete_association'
+
   // unique
   =f.input :accession_number
   =f.input :form_date, :as => 'date_picker', :input_html => { :value => l(f.object.form_date, :format => :picker) }

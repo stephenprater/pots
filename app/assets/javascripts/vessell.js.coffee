@@ -25,7 +25,7 @@ $ ->
   
   $('input[data-association]').keypress (event)->
     if event.which == 13
-      debugger
+      $(this).
       event.preventDefault()
 
   $('input[data-association]').bind('railsAutocomplete.select', (obj,data) ->
