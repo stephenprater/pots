@@ -73,7 +73,7 @@ SimpleForm.setup do |config|
     b.use :html5
     b.use :placeholder
     b.use :label, :class => 'well-label', :wrap_with => { :tag => false }
-    b.wrapper :tag => 'div', :class => ['controls','form-inline','sub-form'] do |ba|
+    b.wrapper :tag => 'div', :class => ['controls','form-inline','sub-form', 'span6'] do |ba|
       ba.use :input, :class => ['span1', 'input-span'], :wrap_with => { :tag => false }
     end
   end

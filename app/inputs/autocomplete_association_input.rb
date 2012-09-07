@@ -5,7 +5,7 @@ class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
     raise ArgumentError, "Autocomplete only works with associations" if reflection.nil?
 
     @url     = options.delete :url
-    @field   = options.delete :autocomplete_on || "value"
+    @field   = options.delete(:autocomplete_on) || "value"
 
     association_class = reflection.klass
     association_name = reflection.name
@@ -25,19 +25,22 @@ class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
     end
     
     @builder.simple_fields_for association_name do |f|
+      template_fields = f.text_field(@field, input_html_options.merge(
+        :value => nil, :type => 'hidden', :id => "#{association_name}_template"))
       unless f.object.new_record?
         output += super
         output += f.hidden_field :id
         output += f.check_box_field :_delete
       else
-        output += f.hidden_field :id 
+        output += f.hidden_field :id
         id_element = "#" + output.match(/id="(.*?)"/)[1]
         tag_options = { 
           :"data-autocomplete" => @url,
           :"data-id-element" => id_element,
-          :"data-association" => association_name
+          :"data-association" => association_name,
         }
-        
+
+        output += template_fields
         output += template.text_field_tag("search_#{association_name}", nil, input_html_options.merge(tag_options))
       end
     end

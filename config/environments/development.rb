@@ -1,3 +1,18 @@
+class DisableAssetsLogger
+  def initialize(app)
+    @app = app
+    Rails.application.assets.logger = Logger.new('/dev/null')
+  end
+
+  def call(env)
+    previous_level = Rails.logger.level
+    Rails.logger.level = Logger::ERROR if env['PATH_INFO'].index('/assets/') == 0
+    @app.call(env)
+  ensure
+    Rails.logger.level = previous_level
+  end
+end
+
 Pots::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -41,5 +56,6 @@ Pots::Application.configure do
   config.to_prepare do 
     load File.expand_path(Pots::Application.root + 'config/initializers/simple_form.rb')
   end
-end
 
+  config.middleware.insert_before Rails::Rack::Logger, DisableAssetsLogger
+end

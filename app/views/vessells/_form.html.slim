@@ -11,6 +11,8 @@
   =f.input :vessell_number
 
   =f.association :project_names, :as => 'autocomplete_association', :url => autocomplete_project_name_lookup_attributes_path
+  =f.association :collections, :as => 'autocomplete_association', :url => autocomplete_collection_lookup_attributes_path
+  =f.association :analysts, :as => 'autocomplete_association', :url => autocomplete_analyst_lookup_attributes_path
 
   // lookup
   //=f.input :project_names, :as => 'autocomplete_association', :url => autocomplete_project_name_lookup_attributes_path
@@ -41,9 +43,9 @@
   // unique
   =f.input :volume
   // unique
-  =f.input :description
+  =f.input :description, :rows => 5
   // unique
-  =f.input :comments
+  =f.input :comments, :rows => 5
 
   /go!
   =f.button :submit
