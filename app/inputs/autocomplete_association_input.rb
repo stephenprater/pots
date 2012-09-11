@@ -35,9 +35,9 @@ class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
         output += f.hidden_field :id
         id_element = "#" + output.match(/id="(.*?)"/)[1]
         tag_options = { 
-          :"data-autocomplete" => @url,
+          :"data-autocomplete" => 'typeahead',
+          :"data-source" => "#{association_name}",
           :"data-id-element" => id_element,
-          :"data-association" => association_name,
         }
 
         output += template_fields
@@ -45,6 +45,12 @@ class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
       end
     end
 
+    collection_array = collection.to_a
+
+    template.instance_exec @field do |field|
+      @autocompletes ||= {}
+      @autocompletes[association_name] = collection_array.collect { |i| {:id => i.id, :name => i.send(field.to_sym)} }
+    end
     output
   end
 end

@@ -10,5 +10,8 @@
   <div class="container">
     <%= yield %>
   </div>
+  <script id="autocompletes" type="text/json">
+    <%= raw @autocompletes.to_json %>
+  </script>
 </body>
 </html>

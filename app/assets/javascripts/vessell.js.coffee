@@ -19,11 +19,11 @@ $ ->
       $.ajax(vessell_search.to_s(), dataType: 'script')
   true
 
-  $('input[data-association]').live('railsAutocomplete.beforeSelect', (obj,data) ->
+  $('input[data-association]').live('typeahead.beforeSelect', (obj,data) ->
       $(this).attr('data-entered-value', $(this).val())
   )
   
-  $('input[data-association]').keypress (event)->
+  $('input[data-association]').live 'typeahead.select', ->
     #and then this one
     # tab or enter will move to the next field
     if event.which == 13 or event.which == 9
@@ -49,7 +49,6 @@ $ ->
       $(this).before(next_id)
       $(this).attr('data-id-element', next_id.attr('id'))
       $(this).val('')
-
 
   $('input[data-association]').live('railsAutocomplete.select', (obj,data) ->
     #this one fires first
