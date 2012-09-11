@@ -22,14 +22,15 @@ class VessellsController < ApplicationController
   end
 
   def create
-    binding.pry
-    @vessell = Vessell.new(params[:product])
+    @vessell = Vessell.new(params[:vessell])
     flash[:notice] = 'Vessell Successfully Created' if @vessell.save
     respond_with @vessell
   end
 
   def destroy
-
+    @vessell = Vessell.find(params[:id])
+    flash[:notice] = 'Vessell Deleted' if @vessell.destroy
+    respond_with @vessell
   end
 
   def update

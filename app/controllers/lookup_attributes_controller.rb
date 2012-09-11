@@ -1,4 +1,6 @@
 class LookupAttributesController < ApplicationController
+  respond_with :js
+
   def autocomplete_lookup_attributes kind, term
     results = LookupAttribute.select(:value).select(:id).where {
       (value.matches "%#{term}%") && (type == kind.classify )
@@ -22,6 +24,15 @@ class LookupAttributesController < ApplicationController
   
   def autocomplete_cultural_affliation
     render :json => (autocomplete_lookup_attributes "cultural_affliations", params[:term])
+  end
+
+  def new
+    params[:association].constantize.new(params.delete_if { |k,v| k == "association" })
+  end
+
+  def associate
+    binding.pry
+    LookupValue.find(params[:id])
   end
 end
 

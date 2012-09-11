@@ -17,32 +17,29 @@ class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
     end
 
     output = String.new.html_safe
-    
-    if reflection.collection?
-      object.send(association_name).empty? and object.send(association_name).new
-    else
-      object.send("#{association_name}=", (object.send(association_name) || association_class.new))
-    end
-    
-    @builder.simple_fields_for association_name do |f|
-      template_fields = f.text_field(@field, input_html_options.merge(
-        :value => nil, :type => 'hidden', :id => "#{association_name}_template"))
-      unless f.object.new_record?
-        output += super
-        output += f.hidden_field :id
-        output += f.check_box_field :_delete
-      else
-        output += f.hidden_field :id
-        id_element = "#" + output.match(/id="(.*?)"/)[1]
-        tag_options = { 
-          :"data-autocomplete" => 'typeahead',
-          :"data-source" => "#{association_name}",
-          :"data-id-element" => id_element,
-        }
 
-        output += template_fields
-        output += template.text_field_tag("search_#{association_name}", nil, input_html_options.merge(tag_options))
-      end
+    # create the template fields
+    @builder.simple_fields_for association_name do |f|
+      output << f.hidden_field(:id, input_html_options.merge(
+        :value => nil, :id => '#{association_name}_id_template'))
+      id_element = "#" + output.match(/id="(.*?)"/)[1]
+      output << f.text_field(@field, input_html_options.merge(
+        :value => nil, :type => 'hidden', :id => "#{association_name}_template"))
+      
+      tag_options = { 
+        :"autocomplete" => "off",
+        :"data-autocomplete" => 'typeahead',
+        :"data-source" => "#{association_name}",
+        :"data-id-element" => id_element,
+      }
+      output << template.text_field_tag("search_#{association_name}", nil, input_html_options.merge(tag_options))
+    end
+
+    binding.pry
+     @builder.simple_fields_for association_name do |f|
+     f.input :id
+     f.check_box_field :_delete
+     f.input @field
     end
 
     collection_array = collection.to_a
