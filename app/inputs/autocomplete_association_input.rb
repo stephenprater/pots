@@ -4,50 +4,48 @@ class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
   def input
     raise ArgumentError, "Autocomplete only works with associations" if reflection.nil?
 
-    @url     = options.delete :url
-    @field   = options.delete(:autocomplete_on) || "value"
+    @field    = options.delete(:autocomplete_on) || "value"
+    @editable = !!(options.delete(:editable))
 
-    association_class = reflection.klass
     association_name = reflection.name
     
-    if not @url
-      @url = template.url_for([:autocomplete, \
-        [association_class.to_s.underscore, @field].compact.join("_"), \
-         association_class])
-    end
-
     output = String.new.html_safe
 
-    # create the template fields
-    @builder.simple_fields_for association_name do |f|
-      output << f.hidden_field(:id, input_html_options.merge(
-        :value => nil, :id => '#{association_name}_id_template'))
-      id_element = "#" + output.match(/id="(.*?)"/)[1]
-      output << f.text_field(@field, input_html_options.merge(
-        :value => nil, :type => 'hidden', :id => "#{association_name}_template"))
-      
-      tag_options = { 
-        :"autocomplete" => "off",
-        :"data-autocomplete" => 'typeahead',
-        :"data-source" => "#{association_name}",
-        :"data-id-element" => id_element,
-      }
-      output << template.text_field_tag("search_#{association_name}", nil, input_html_options.merge(tag_options))
+    # list any existing associations
+    @builder.simple_fields_for association_name do |f| 
+      output << f.hidden_field(:id)
+      output << f.input(@field, :disabled => true, :wrapper => custom_wrapper, :input_html => input_html_options)
     end
 
-    binding.pry
-     @builder.simple_fields_for association_name do |f|
-     f.input :id
-     f.check_box_field :_delete
-     f.input @field
-    end
+    tag_options = { 
+      :"autocomplete" => "off",
+      :"data-autocomplete" => 'typeahead',
+      :"data-source" => "#{association_name}",
+    }
+    output.concat(template.text_field_tag("search_#{association_name}", nil, input_html_options.merge(tag_options)))
 
-    collection_array = collection.to_a
-
-    template.instance_exec @field do |field|
+    template.instance_exec @field, collection.to_a do |field, collection_array|
       @autocompletes ||= {}
       @autocompletes[association_name] = collection_array.collect { |i| {:id => i.id, :name => i.send(field.to_sym)} }
     end
+
     output
   end
+
+  def custom_wrapper
+    SimpleForm.build :tag => :div, :class => ["collection-list", "input-append","control-group"] do |b|
+      b.use :input
+      b.use :destroy
+    end
+  end
 end
+
+module SimpleForm::Components::Destroy
+  def destroy
+    output = String.new.html_safe
+    output += "<span class='add-on'><a href='#' class='destroy'><i class='icon-trash'></i></a></span>".html_safe
+    output += template.hidden_field_tag(object_name + '[_destroy]', false, :class => '_destroy')
+  end
+end
+
+SimpleForm::Inputs::Base.send(:include, SimpleForm::Components::Destroy)

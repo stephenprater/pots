@@ -62,7 +62,7 @@ SimpleForm.setup do |config|
     b.use :placeholder
     b.use :label
     b.wrapper :tag => 'div', :class => 'controls' do |ba|
-      ba.use :input, :class => 'span6'
+      ba.use :input, :class => 'span6', :wrap_with => { :tag => false }
       ba.use :error, :wrap_with => { :tag => 'span', :class => 'help-inline' }
       ba.use :hint,  :wrap_with => { :tag => 'p', :class => 'help-block' }
     end

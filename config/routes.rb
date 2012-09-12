@@ -16,6 +16,12 @@ Pots::Application.routes.draw do
   #
   resources :vessells do
     get :autocomplete_vessell_accession_number, :on => :collection
+    new do
+      resource :lookup_attribute, :only => [] do
+        get :new
+        get :associate
+      end
+    end
     resource :lookup_attribute, :only => [] do
       get :new
       get :associate

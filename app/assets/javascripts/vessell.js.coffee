@@ -19,23 +19,24 @@ $ ->
       $.ajax(vessell_search.to_s(), dataType: 'script')
   true
 
+
+
   $(window.document).on 'typeahead.beforeSelect', 'input[data-autocomplete]', (value, data)->
     console.log 'before select'
-    # remember what we actually enetered
     $(this).data('typeahead')['entered_valued'] = $(this).val()
 
-  $(window.document).on 'typehead.noSelect', 'input[data-autocomplete]', (e)->
-    debugger
-    e.preventDefault()
-    $.ajax(Routes.vessell_lookup_attribute_path(),
+  $(window.document).on 'typeahead.noSelect', 'input[data-autocomplete]', (e)->
+    console.log 'no select'
+    $.ajax("#{window.location.pathname}/lookup_attribute",
       dataType: 'script',
       association: $(this).attr('data-source')
       value: $(this).attr('data-entered-value')
     )
-    return false
+    return true;
 
-  $(window.document).on 'typehead.select', 'input[data-autocomplete]', (value, text)->
-    $.ajax(Routes.associate_vessell_lookup_attribute_path(),
+  $(window.document).on 'typeahead.select', 'input[data-autocomplete]', (value, text)->
+    console.log 'selected'
+    $.ajax("#{window.location.pathname}/lookup_attribute/associate",
       dataType: 'script',
       association: $(this).attr('data-source')
       id: value

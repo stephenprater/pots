@@ -1,8 +1,7 @@
 =simple_form_for @vessell, :wrapper => :bootstrap_wide do |f|
 
-  -f.object.project_names.new( :value => 'test' )
-
   =f.association :site, :autocomplete_on => 'name', :as => 'autocomplete_association'
+  =f.hidden_field :id
 
   // unique
   =f.input :accession_number
@@ -10,9 +9,9 @@
   // unique
   =f.input :vessell_number
 
-  =f.association :project_names, :as => 'autocomplete_association', :url => autocomplete_project_name_lookup_attributes_path
-  =f.association :collections, :as => 'autocomplete_association', :url => autocomplete_collection_lookup_attributes_path
-  =f.association :analysts, :as => 'autocomplete_association', :url => autocomplete_analyst_lookup_attributes_path
+  =f.association :project_names, :as => 'autocomplete_association'
+  =f.association :collections, :as => 'autocomplete_association'
+  =f.association :analysts, :as => 'autocomplete_association'
 
   // lookup
   //=f.input :project_names, :as => 'autocomplete_association', :url => autocomplete_project_name_lookup_attributes_path
