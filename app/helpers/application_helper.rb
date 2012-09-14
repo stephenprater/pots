@@ -3,4 +3,8 @@ module ApplicationHelper
     options.reverse_merge! :renderer => RemoteLinkRenderer
     will_paginate collection, options
   end
+
+  def unique_child_index
+    SecureRandom.uuid
+  end
 end

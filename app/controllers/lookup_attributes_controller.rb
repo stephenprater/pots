@@ -1,38 +1,41 @@
 class LookupAttributesController < ApplicationController
-  respond_with :js
+  respond_to :js
 
-  def autocomplete_lookup_attributes kind, term
-    results = LookupAttribute.select(:value).select(:id).where {
-      (value.matches "%#{term}%") && (type == kind.classify )
+  def autocomplete
+    results = lookup_type.select(:value).select(:id).where {
+      (value.matches "%#{term}%")
     }.limit(10)
     results.collect do |r|
       {:id => r.id, :label => r.value}
     end
-  end
-
-  def autocomplete_collection
-    render :json => (autocomplete_lookup_attributes "collections", params[:term])
-  end
-
-  def autocomplete_analyst
-    render :json => (autocomplete_lookup_attributes "analysts", params[:term])
-  end
-
-  def autocomplete_project_name
-    render :json => (autocomplete_lookup_attributes "project_names", params[:term])
-  end
-  
-  def autocomplete_cultural_affliation
-    render :json => (autocomplete_lookup_attributes "cultural_affliations", params[:term])
+    render :json => results
   end
 
   def new
-    params[:association].constantize.new(params.delete_if { |k,v| k == "association" })
+    sanitized_params = {}
+    @lookup_attribute = quiet_sanitizer lookup_type.new do |obj|
+      sanitized_params = obj.send(:sanitize_for_mass_assignment,params)
+      obj.update_attributes(sanitized_params)
+    end
+    
+    @inputs = sanitized_params.keys
+    @vessell = params[:id] == "0" ? Vessell.new : Vessell.find(params[:id])
   end
 
   def associate
-    binding.pry
-    LookupValue.find(params[:id])
+    @lookup_attribute = lookup_type.find(params[:id])
+    @vessell = params[:vessell_id] == 0 ? Vessell.new : Vessell.find(params[:vessell_id])
+    #find the reflection that uses this type - i think this should be abstracted
+    ref_name = @vessell.reflections[lookup_type.name.pluralize.underscore.to_sym].name
+    @vessell.send(ref_name) << @lookup_attribute
+  end
+
+  private
+  def lookup_type
+    klass = params[:type].camelize.constantize
+    unless klass < controller_name.classify.constantize
+      raise ArgumentError, "not a valid lookup"
+    end
+    klass
   end
 end
-

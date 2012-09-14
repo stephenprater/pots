@@ -6,6 +6,11 @@ class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
 
     @field    = options.delete(:autocomplete_on) || "value"
     @editable = !!(options.delete(:editable))
+    @callback = options.delete(:callback) || begin
+      [ActiveModel::Naming.route_key(object),
+       object.id || 0,
+       ActiveModel::Naming.singular_route_key(reflection.klass)].join('/')
+    end
 
     association_name = reflection.name
     
@@ -19,6 +24,7 @@ class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
 
     tag_options = { 
       :"autocomplete" => "off",
+      :"data-callback" => "/#{@callback}",
       :"data-autocomplete" => 'typeahead',
       :"data-source" => "#{association_name}",
     }
@@ -43,7 +49,7 @@ end
 module SimpleForm::Components::Destroy
   def destroy
     output = String.new.html_safe
-    output += "<span class='add-on'><a href='#' class='destroy'><i class='icon-trash'></i></a></span>".html_safe
+    output += "<span class='add-on'><a href='#' data-destroy='#{object_name + '[_destroy]'}'><i class='icon-trash'></i></a></span>".html_safe
     output += template.hidden_field_tag(object_name + '[_destroy]', false, :class => '_destroy')
   end
 end

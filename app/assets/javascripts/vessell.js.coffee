@@ -20,25 +20,22 @@ $ ->
   true
 
 
-
   $(window.document).on 'typeahead.beforeSelect', 'input[data-autocomplete]', (value, data)->
     console.log 'before select'
-    $(this).data('typeahead')['entered_valued'] = $(this).val()
+    $(this).data('typeahead')['entered_value'] = $(this).val()
 
   $(window.document).on 'typeahead.noSelect', 'input[data-autocomplete]', (e)->
     console.log 'no select'
-    $.ajax("#{window.location.pathname}/lookup_attribute",
+    $.ajax("#{$(this).attr('data-callback')}/new",
       dataType: 'script',
-      association: $(this).attr('data-source')
-      value: $(this).attr('data-entered-value')
+      data: { value: $(this).data('typeahead')['entered_value'] }
     )
-    return true;
+    return true
 
   $(window.document).on 'typeahead.select', 'input[data-autocomplete]', (value, text)->
     console.log 'selected'
-    $.ajax("#{window.location.pathname}/lookup_attribute/associate",
+    $.ajax("#{$(this).attr('data-callback')}/associate"
       dataType: 'script',
-      association: $(this).attr('data-source')
       id: value
     )
 

@@ -16,24 +16,17 @@ Pots::Application.routes.draw do
   #
   resources :vessells do
     get :autocomplete_vessell_accession_number, :on => :collection
-    new do
-      resource :lookup_attribute, :only => [] do
-        get :new
-        get :associate
-      end
-    end
-    resource :lookup_attribute, :only => [] do
-      get :new
-      get :associate
+    member do 
+      get '/:type/new', :controller => :lookup_attributes, :action => :new
+      get '/:type/:type_id/associate', :controller => :lookup_attributes, :action => :associate
     end
   end
 
-  resources :lookup_attributes, :only => [] do
-    get :autocomplete_collection, :on => :collection
-    get :autocomplete_analyst, :on => :collection
-    get :autocomplete_project_name, :on => :collection
-    get :autocomplete_cultural_affliation, :on => :collection
+  resources :collections, :analysts, :project_names, :cultural_affliations,
+    :only => [], :controller => :lookup_attributes do
+    get :autocomplete, :on => :collection
   end
+
 
   resources :counties, :only => [:index, :new] do
     post :create_or_update, :on => :collection, :path => "", :as => nil

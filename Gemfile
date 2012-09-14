@@ -27,6 +27,7 @@ group :test, :development do
   gem 'pry'
   gem 'pry-debugger'
   gem 'pry-stack_explorer'
+  gem 'pry-rescue'
   gem 'pry-rails'
 end
 
