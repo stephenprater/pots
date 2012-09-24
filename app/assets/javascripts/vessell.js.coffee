@@ -19,23 +19,4 @@ $ ->
       $.ajax(vessell_search.to_s(), dataType: 'script')
   true
 
-
-  $(window.document).on 'typeahead.beforeSelect', 'input[data-autocomplete]', (value, data)->
-    console.log 'before select'
-    $(this).data('typeahead')['entered_value'] = $(this).val()
-
-  $(window.document).on 'typeahead.noSelect', 'input[data-autocomplete]', (e)->
-    console.log 'no select'
-    $.ajax("#{$(this).attr('data-callback')}/new",
-      dataType: 'script',
-      data: { value: $(this).data('typeahead')['entered_value'] }
-    )
-    return true
-
-  $(window.document).on 'typeahead.select', 'input[data-autocomplete]', (value, text)->
-    console.log 'selected'
-    $.ajax("#{$(this).attr('data-callback')}/associate"
-      dataType: 'script',
-      id: value
-    )
-
+  

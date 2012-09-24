@@ -39,6 +39,7 @@ gem 'will_paginate'
 gem 'bootstrap-sass-rails', :git => 'git://github.com/yabawock/bootstrap-sass-rails'
 gem 'rails3-jquery-autocomplete'
 gem 'default_value_for'
+gem 'acts-as-taggable-on'
 
 gem 'js-routes'
 

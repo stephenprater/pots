@@ -9,9 +9,7 @@
   // unique
   =f.input :vessell_number
 
-  =f.association :project_names, :as => 'autocomplete_association'
-  =f.association :collections, :as => 'autocomplete_association'
-  =f.association :analysts, :as => 'autocomplete_association'
+  =f.input :projects, :as => 'tag'
 
   // lookup
   //=f.input :project_names, :as => 'autocomplete_association', :url => autocomplete_project_name_lookup_attributes_path
@@ -36,8 +34,6 @@
   // ?
   =f.input :use_wear
   // lookup
-  =f.association :cultural_affliations, :as => 'autocomplete_association'
-  // unique
   =f.input :weight
   // unique
   =f.input :volume

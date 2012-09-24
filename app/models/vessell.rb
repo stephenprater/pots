@@ -34,30 +34,8 @@ class Vessell < ActiveRecord::Base
      :unit_of_measurement, :authenticity, :condition, :missing_portions, :use_wear,
      :cultural_affliation, :appendages, :weight, :volume, :description, :comments
 
-  has_many :vessell_lookup_attributes
-  
-  has_many :analysts, 
-    :through => :vessell_lookup_attributes, 
-    :source => :lookup_attribute,
-    :class_name => 'Analyst'
-  has_many :cultural_affliations,
-    :through => :vessell_lookup_attributes, 
-    :source => :lookup_attribute,
-    :class_name => 'CulturalAffliation'
- 
-  #these really need to be has_one, but that's 
-  #impossible - how to fix?
-  has_many :collections,
-    :through => :vessell_lookup_attributes,
-    :source => :lookup_attribute,
-    :class_name => 'Collection'
-  has_many :project_names, 
-    :through => :vessell_lookup_attributes,
-    :source => :lookup_attribute,
-    :class_name => 'ProjectName'
-
-  accepts_nested_attributes_for :analysts, :cultural_affliations, :collections, :project_names
-
+  acts_as_ordered_taggable
+  acts_as_ordered_taggable_on :projects, :collections, :analysts, :cultural_affliations
 
   #type variety
   has_many :vessell_type_varieties
