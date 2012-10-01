@@ -14,7 +14,7 @@
 //= require jquery-ui
 //= require jquery_ujs
 //= require twitter/bootstrap
+//= require bootstrap-tagit
 //= require bootstrap-datepicker/bootstrap-datepicker
-//= require bootstrap-tagmanager/bootstrap-tagmanager
 //= require js-routes
 //= require_tree .

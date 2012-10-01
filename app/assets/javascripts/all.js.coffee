@@ -4,6 +4,14 @@ $ ->
   $("a[rel=tooltip]").tooltip()
   $("input.datepicker").datepicker()
 
+$ ->
+  autocompletes = $.parseJSON($('script#autocompletes').html())
+  for tagging in $("*[data-tag]")
+    $(tagging).bootTag(
+      tags: autocompletes[$(tagging).attr('data-tag-source')]
+      field: $(tagging).attr('data-tag')
+      input: $(tagging).attr('data-tag-input')
+    )
 
 $ ->
   Array::remove = (e)-> @[t..t] = [] if(t = @indexOf(e)) > -1

@@ -73,7 +73,6 @@ GEM
       multi_json (~> 1.0)
     hike (1.2.1)
     i18n (0.6.0)
-    interception (0.1)
     journey (1.0.4)
     jquery-rails (2.1.1)
       railties (>= 3.1.0, < 5.0)
@@ -101,9 +100,6 @@ GEM
       pry (~> 0.9.9)
     pry-rails (0.2.1)
       pry (>= 0.9.10)
-    pry-rescue (0.8)
-      interception
-      pry
     pry-stack_explorer (0.4.5)
       binding_of_caller (~> 0.6.2)
     rack (1.4.1)
@@ -182,7 +178,6 @@ DEPENDENCIES
   pry
   pry-debugger
   pry-rails
-  pry-rescue
   pry-stack_explorer
   rails (= 3.2.6)
   rails3-jquery-autocomplete
