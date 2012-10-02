@@ -2,37 +2,37 @@ class Vessell < ActiveRecord::Base
   class << self
     def units
       { 
-        centimeters: 0,
-        inches: 1
+        'cm' => 0,
+        'in' => 1
       }
     end
 
     def authenticity
       {
-        authentic: 0,
-        fake: 1,
-        fake_as_hell: 2,
-        dunno: 3
+        'Authentic' => 0,
+        'Fake' => 1,
+        'Fake as Hell' => 2,
+        'Dunno' => 3
       }
     end
 
     def condition
       {
-        broke: 0,
-        really_broke: 1,
-        kinda_broke: 2,
-        somebody_put_it_back_together: 3
+        'Broke' => 0,
+        'Kinda Broke' => 2,
+        'Really Broke' => 1,
+        'Reassembled' => 3
       }
     end
   end
 
   default_value_for :form_date, Date.today
 
-
   attr_accessible :accession_number, :form_date, :vessell_number, :project_name,
      :collection, :analyst, :feature_number, :burial_number, :other_catalog_information,
      :unit_of_measurement, :authenticity, :condition, :missing_portions, :use_wear,
-     :cultural_affliation, :appendages, :weight, :volume, :description, :comments
+     :cultural_affliation, :appendages, :weight, :volume, :description, :comments,
+     :projects, :collections, :analysts, :cultural_affliations
 
   acts_as_ordered_taggable
   acts_as_ordered_taggable_on :projects, :collections, :analysts, :cultural_affliations
@@ -79,4 +79,10 @@ class Vessell < ActiveRecord::Base
   has_one :county, :through => :site
 
   accepts_nested_attributes_for :site
+
+  validates_uniqueness_of :accession_number
+  validates_uniqueness_of :vessell_number, :scope => [:site_id]
+
+  validates_numericality_of :weight, :volume
+
 end

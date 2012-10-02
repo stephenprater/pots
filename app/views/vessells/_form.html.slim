@@ -1,46 +1,43 @@
 =simple_form_for @vessell, :wrapper => :bootstrap_wide do |f|
 
-  =f.association :site, :autocomplete_on => 'name', :as => 'autocomplete_association'
+  =f.association :site, :autocomplete => 'name', :as => 'autocomplete_association'
   =f.hidden_field :id
 
   // unique
   =f.input :accession_number
+
   =f.input :form_date, :as => 'date_picker', :input_html => { :value => l(f.object.form_date, :format => :picker) }
+  
   // unique
   =f.input :vessell_number
 
   =f.input :projects, :as => 'tag'
+  =f.input :collections, :as => 'tag'
+  =f.input :analysts, :as => 'tag'
 
-  // lookup
-  //=f.input :project_names, :as => 'autocomplete_association', :url => autocomplete_project_name_lookup_attributes_path
-  //// lookup
-  //=f.input :collections, :as => 'autocomplete_association', :url => autocomplete_collection_lookup_attributes_path
-  //// lookup
-  //=f.input :analysts, :as => 'autocomplete_association', :url => autocomplete_analyst_lookup_attributes_path
-  // unique?
   =f.input :feature_number
-  // unique?
   =f.input :burial_number
+  
   // textual
-  =f.input :other_catalog_information
-  // radio_boxes 
+  =f.input :other_catalog_information, :input_html => { :rows => 2 }
+  
   =f.input :unit_of_measurement, :as => 'radio_buttons', :collection => Vessell.units, :wrapper => 'bootstrap_well'
-  // checkboxes
   =f.input :authenticity, :as => 'radio_buttons', :collection => Vessell.authenticity, :wrapper => 'bootstrap_well'
-  // checkboxes
   =f.input :condition, :as => 'radio_buttons', :collection => Vessell.condition, :wrapper => 'bootstrap_well'
+  
   // text
-  =f.input :missing_portions
-  // ?
+  =f.input :missing_portions, :input_html => { :rows => 2 }
+
+  // text
   =f.input :use_wear
-  // lookup
+
   =f.input :weight
   // unique
   =f.input :volume
   // unique
-  =f.input :description, :rows => 5
+  =f.input :description, :input_html  => { :rows => 5 }
   // unique
-  =f.input :comments, :rows => 5
+  =f.input :comments, :input_html => { :rows => 5 }
 
   /go!
   =f.button :submit

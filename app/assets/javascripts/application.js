@@ -14,7 +14,9 @@
 //= require jquery-ui
 //= require jquery_ujs
 //= require twitter/bootstrap
-//= require bootstrap-tagit
+//= require bootstrap-boottag
+//= require bootstrap-typeahead
+//= require bootstrap-associator
 //= require bootstrap-datepicker/bootstrap-datepicker
 //= require js-routes
 //= require_tree .

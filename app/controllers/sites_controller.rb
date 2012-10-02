@@ -16,5 +16,10 @@ class SitesController < ApplicationController
     @site = Site.new do |s|
       s.name = params[:name]
     end
+    respond_with @site
+  end
+
+  def associate
+    respond_with @site 
   end
 end

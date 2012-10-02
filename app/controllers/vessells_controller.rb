@@ -22,6 +22,8 @@ class VessellsController < ApplicationController
   end
 
   def create
+    binding.pry
+
     @vessell = Vessell.new(params[:vessell])
     flash[:notice] = 'Vessell Successfully Created' if @vessell.save
     respond_with @vessell

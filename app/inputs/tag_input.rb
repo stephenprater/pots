@@ -20,7 +20,7 @@ class TagInput < SimpleForm::Inputs::StringInput
     # ajax is too slow for this
     template.instance_exec attribute_name do |context|
       @autocompletes ||= {}
-      @autocompletes[context] = ActsAsTaggableOn::Tag.joins { taggings }.where { taggings.context == context.to_s }.collect { |i| i.name }
+      @autocompletes[context] = ActsAsTaggableOn::Tag.joins { taggings }.where { taggings.context == context.to_s }.uniq.collect { |i| i.name }
     end
 
     output

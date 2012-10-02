@@ -1,0 +1,22 @@
+@import "twitter/bootstrap";
+
+$borderRadius : 4px;
+
+ul.tag {
+  @extend .unstyled;
+  margin: 0;
+  li.tag {
+    @include border-radius($borderRadius);
+    background-color: $infoBackground;
+    color: $infoText;
+    border: 1px $infoBorder solid;
+    padding: $borderRadius;
+    height: $baseLineHeight;
+    margin-bottom: $gridGutterWidth / 2;
+    text-indent: $baseFontSize / 2;
+    a.close {
+      position: relative;
+      bottom: 2px;
+    }
+  }
+}

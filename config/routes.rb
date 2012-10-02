@@ -22,12 +22,6 @@ Pots::Application.routes.draw do
     end
   end
 
-  resources :collections, :analysts, :project_names, :cultural_affliations,
-    :only => [], :controller => :lookup_attributes do
-    get :autocomplete, :on => :collection
-  end
-
-
   resources :counties, :only => [:index, :new] do
     post :create_or_update, :on => :collection, :path => "", :as => nil
     get :autocomplete_county_name, :on => :collection

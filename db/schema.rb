@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120924211640) do
+ActiveRecord::Schema.define(:version => 20121002200228) do
 
   create_table "appendages", :force => true do |t|
     t.string   "description"
@@ -284,12 +284,9 @@ ActiveRecord::Schema.define(:version => 20120924211640) do
 
   create_table "vessells", :force => true do |t|
     t.date     "form_date"
-    t.string   "analyst"
-    t.string   "project_name"
     t.string   "accession_number"
     t.string   "vessell_number"
     t.text     "other_catalog_information"
-    t.string   "collection"
     t.string   "feature_number"
     t.string   "burial_number"
     t.string   "unit_of_measurement"
@@ -297,7 +294,6 @@ ActiveRecord::Schema.define(:version => 20120924211640) do
     t.string   "condition"
     t.string   "missing_portions"
     t.string   "use_wear"
-    t.string   "cultural_affliation"
     t.float    "weight"
     t.float    "volume"
     t.text     "description"

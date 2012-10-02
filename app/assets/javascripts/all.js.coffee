@@ -5,13 +5,17 @@ $ ->
   $("input.datepicker").datepicker()
 
 $ ->
-  autocompletes = $.parseJSON($('script#autocompletes').html())
+  window.autocompletes = $.parseJSON($('script#autocompletes').html())
   for tagging in $("*[data-tag]")
-    $(tagging).bootTag(
-      tags: autocompletes[$(tagging).attr('data-tag-source')]
-      field: $(tagging).attr('data-tag')
-      input: $(tagging).attr('data-tag-input')
-    )
+    do(tagging) ->
+      $(tagging).bootTag(
+        tags: ->
+          window.autocompletes[$(tagging).attr('data-tag-source')]
+        field: $(tagging).attr('data-tag')
+        input: $(tagging).attr('data-tag-input')
+      )
+
+  $(association).associator() for association in $('*[data-association]')
 
 $ ->
   Array::remove = (e)-> @[t..t] = [] if(t = @indexOf(e)) > -1
