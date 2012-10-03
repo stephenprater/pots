@@ -1,9 +1,6 @@
-<% form = capture do  %>
-  <%= render 'form' %>
+<%= binding.pry %>
+<% form = capture do %>
+  <%= render 'site' %>
 <% end -%>
 
-$('#vessell_site').parents('.control-group').html('<%= escape_javascript form %>');
-$('#vessell_site_name').focus();
-var val = $('#vessell_site_name').val();
-$('#vessell_site_name').val('');
-$('#vessell_site_name').val(val);
+$('<%= escape_javascript @field %>').replace(<%= escape_javascript form %>)

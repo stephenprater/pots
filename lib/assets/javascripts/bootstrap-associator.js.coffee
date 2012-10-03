@@ -1,24 +1,31 @@
 $ ->
+
+  unless String::template
+    String::template = (obj)->
+      str = @toString()
+      return str unless obj
+
+      (str = str.replace ///\#{#{key}\}///, obj[key]) for key of obj
+      return str
+
   class Associator
     constructor: (item, options) ->
       @options = $.extend(true, {}, $.fn.associator.defaults, options)
       @element = $(item)
 
-      @new_callback = @element.attr('data-new-callback')
-      @associate_callback = @element.attr('data-associate-callback')
-      @autocomplete = @element.attr('data-autocomplete')
-      @association = @element.attr('data-association')
-
+      @association = @element.data('association')
+      @element.removeAttr('data-association')
+      
       @element.typeahead(
         ajax: {
-          url: @autocomplete
+          url: @association.autocomplete
           method: 'get'
           triggerLength: 2
         }
-        menu: "<ul id='#{@element.attr('data-association')}' class='typeahead dropdown-menu'></ul>"
-        display: @autocomplete.match /[^_]+$/
-        matcher: (item)->
-          true if !~(item.toLowerCase().indexOf(this.query.toLowerCase()) || item == "New")
+        menu: "<ul id='#{@association.name}' class='typeahead dropdown-menu'></ul>"
+        display: @association.autocomplete.match /[^_]+$/
+        matcher: (value, item)->
+          true if !~(value.toLowerCase().indexOf(this.query.toLowerCase()) || item.id == "0")
       )
 
       @element.bind 'keypress', (e)->
@@ -27,16 +34,20 @@ $ ->
 
       that = @
 
-      @element.bind 'typeahead.beforeSelect', (e, val) ->
-        that['entered_value'] = val
+      @element.bind 'typeahead.beforeSelect', (e, val, item, obj) ->
+        typeahead = $(this).data('typeahead')
+        if obj.id == 0
+          obj[typeahead.options.display] = val
+        obj['field'] = that.association.field
 
-        @element.bind 'typeahead.select', (e, val) ->
-        debugger
-        if val.id == 0
-          $.get(@new_callback, { name: that['entered_value']})
-        else
-          $.get(@associate_callback)
-
+      @element.bind 'typeahead.select', (e, val, obj) ->
+        id = obj.id
+        delete obj.id
+        $.ajax(
+          url: that.association.callback.template(association_id: id)
+          data: obj
+          dataType: 'script'
+        )
 
   $.fn.associator = (option)->
     for el in this

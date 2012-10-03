@@ -58,4 +58,6 @@ Pots::Application.configure do
   end
 
   config.middleware.insert_before Rails::Rack::Logger, DisableAssetsLogger
+
+  config.autoload_paths += Dir["#{config.root}/lib/**/"]
 end

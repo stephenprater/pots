@@ -16,9 +16,8 @@ Pots::Application.routes.draw do
   #
   resources :vessells do
     get :autocomplete_vessell_accession_number, :on => :collection
-    member do 
-      get '/:type/new', :controller => :lookup_attributes, :action => :new
-      get '/:type/:type_id/associate', :controller => :lookup_attributes, :action => :associate
+    resource :site, :only => [] do
+      get "associate/:id" => 'sites#associate'
     end
   end
 
@@ -27,7 +26,7 @@ Pots::Application.routes.draw do
     get :autocomplete_county_name, :on => :collection
   end
 
-  resources :sites, :only => [:new] do
+  resources :sites, :only => [] do
     get :autocomplete_site_name, :on => :collection
   end
 

@@ -4,29 +4,31 @@ class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
   def input
     raise ArgumentError, "Autocomplete only works with associations" if reflection.nil?
 
-    field    = options.delete(:autocomplete) || "value"
-
-    association_name = reflection.name
-    
-    associate_callback = options.delete(:associate) || associate_route
-    new_callback = options.delete(:new) || new_route 
+    field                = options.delete(:autocomplete) || "value"
+    association_name     = reflection.name
+    association_callback = options.delete(:associate) || callback_route
     association_template = options.delete(:template) || association_name
+    output               = String.new.html_safe
 
-    
-    output = String.new.html_safe
-
-    # list any existing associations
-    @builder.simple_fields_for association_name do |f| 
+    # list any existing associations, useing the provided partial
+    # falling back to the name of the association
+    output.concat @builder.simple_fields_for association_name do |f| 
       template.render association_template, :f => f
     end
 
+    form_field = ActionView::Helpers::InstanceTag.new(object_name, association_name, nil, object).send(:tag_name)
+
+    association_data = {
+      :name         => association_name,
+      :autocomplete => autocomplete_route(field),
+      :callback     => association_callback,
+      :field        => form_field
+    }
+
     if reflection.collection? || !object.send(association_name)
       tag_options = { 
-        :"autocomplete" => "off",
-        :"data-association" => association_name,
-        :"data-new-callback" => new_callback,
-        :"data-autocomplete" => autocomplete_route(field),
-        :"data-associate-callback" => associate_callback,
+        :"autocomplete"     => "off",
+        :"data-association" => association_data.to_json
       }
       output.concat(template.text_field_tag("search_#{association_name}", nil, input_html_options.merge(tag_options)))
     end
@@ -43,30 +45,26 @@ class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
 
   private
   def base_route
-    controller = ActiveModel::Naming.route_key(object)
-    id = object.id || 0
-    association = ActiveModel::Naming.singular_route_key(reflection.klass)
-    [controller, id, association]
+        [controller, id, association]
   end
 
   def autocomplete_route field 
-    controller = ActiveModel::Naming.route_key(reflection.klass)
-    singular = ActiveModel::Naming.singular_route_key(reflection.klass)
+    controller = reflection.klass.model_name.route_key
+    singular = reflection.klass.model_name.singular_route_key
     autocomplete_method = "autocomplete_#{singular}_#{field}"
     "/" + [controller, autocomplete_method].join("/")
   end
 
-  def new_route
-    if reflection.collection?
-      "/" + ((base_route << 'new').join("/"))
+  def callback_route
+    parent = object.class.model_name.route_key
+    id = object.id || 0
+    unless reflection.collection? 
+      association = reflection.klass.model_name.singular_route_key
+      "/" + ([parent, id, association, 'associate', '#{association_id}']).join('/')
     else
-      controller = ActiveModel::Naming.route_key(reflection.klass)
-      "/" + [controller, 'new'].join("/")
+      association = reflection.klass.model_name.route_key
+      "/" + ([parent, id, association, '#{association_id}', 'associate']).join('/')
     end
-  end
-
-  def associate_route
-    "/" + (base_route << 'associate').join('/')
   end
 end
 

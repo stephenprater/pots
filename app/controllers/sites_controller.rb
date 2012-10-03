@@ -1,5 +1,10 @@
 class SitesController < ApplicationController
-  respond_to :js
+  include ProvidesAssociation
+
+  binding.pry
+
+  #needs view_path_prefix and model config
+  associates_with :vessell
 
   def autocomplete_site_name
     term = params[:term]
@@ -9,17 +14,5 @@ class SitesController < ApplicationController
     end
     res << {:id => 0, :name => 'New'}
     render :json => res
-  end
- 
-
-  def new
-    @site = Site.new do |s|
-      s.name = params[:name]
-    end
-    respond_with @site
-  end
-
-  def associate
-    respond_with @site 
   end
 end
