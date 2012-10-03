@@ -7,7 +7,7 @@ GIT
       sass-rails (~> 3.1)
 
 PATH
-  remote: /Users/stephenprater/Documents/personal/simple_form
+  remote: /Users/stephenp/Code/simple_form
   specs:
     simple_form (2.0.2)
       actionpack (~> 3.0)

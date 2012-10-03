@@ -17,14 +17,21 @@ $ ->
         }
         menu: "<ul id='#{@element.attr('data-association')}' class='typeahead dropdown-menu'></ul>"
         display: @autocomplete.match /[^_]+$/
+        matcher: (item)->
+          true if !~(item.toLowerCase().indexOf(this.query.toLowerCase()) || item == "New")
       )
+
+      @element.bind 'keypress', (e)->
+        if e.which == 13
+          e.preventDefault()
 
       that = @
 
       @element.bind 'typeahead.beforeSelect', (e, val) ->
         that['entered_value'] = val
 
-      @element.bind 'typeahead.select', (e, val) ->
+        @element.bind 'typeahead.select', (e, val) ->
+        debugger
         if val.id == 0
           $.get(@new_callback, { name: that['entered_value']})
         else
