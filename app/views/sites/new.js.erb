@@ -1,8 +1,7 @@
 <% form = capture do %>
-  <%= multi_nested_fields do |f| %>
-    <% binding.pry -%>
-    <% render @partial_name -%>
+  <% simple_fields_for @field, @child, :index => @child_index do |f| %>
+    <%= render @partial_name, :f => f -%>
   <% end -%>
 <% end -%>
 
-$('<%= escape_javascript @field %>').replace(<%= escape_javascript form %>)
+$('[name="<%= escape_javascript @field %>"]').replace('<%= escape_javascript form %>')

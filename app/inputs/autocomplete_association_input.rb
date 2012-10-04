@@ -12,6 +12,7 @@ class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
 
     # list any existing associations, useing the provided partial
     # falling back to the name of the association
+    binding.pry
     output.concat @builder.simple_fields_for association_name do |f| 
       template.render association_template, :f => f
     end
