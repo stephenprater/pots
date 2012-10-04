@@ -1,8 +1,11 @@
 module ProvidesAssociation
   extend ActiveSupport::Concern
 
+  include ActionView::Helpers::FormHelper
+
   included do |target|
     target.respond_to :js, :only => :associate
+    helper_method :multi_nested_fields
   end
   
   module ClassMethods
@@ -26,15 +29,16 @@ module ProvidesAssociation
     child_klass = controller_name.classify.constantize
   
     parents = self.class.parent_parameters.slice(*(params.keys & self.class.parent_parameters.keys))
-
-    @parent_objects = []
-    parents.each do |key, value|
-      lookup_context.prefixes.unshift value[:view_prefix]
-      @parent_objects << value[:klass]
+  
+    @parents_obj = []
+    parents.each do |k,v|
+      lookup_context.prefixes.unshift v[:view_prefix]
+      @parents_obj << v[:klass]
     end
 
     @field = request.query_parameters.delete :field
     @child_index = SecureRandom.uuid
+    @partial_name = child_klass.model_name.singular
 
     if params[:id] == "0" || params[:id] == "new"
       @child = quiet_sanitizer child_klass.new do |obj|
@@ -43,10 +47,21 @@ module ProvidesAssociation
           obj.send("#{param}=", value)
         end
       end
-      respond_with @child 
+      render :new, :formats => [:js]
     else
       @child = child_klass.find(params[:id])
       respond_with @child
+    end
+  end
+
+  private
+  def multi_nested_fields f = self 
+    fields_for @parents_obj.shift.new do |g|
+      if @parents_obj.length > 0
+        multi_nested_fields g
+      else
+        yield g
+      end
     end
   end
 end

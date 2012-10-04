@@ -1,8 +1,6 @@
 class SitesController < ApplicationController
   include ProvidesAssociation
 
-  binding.pry
-
   #needs view_path_prefix and model config
   associates_with :vessell
 
