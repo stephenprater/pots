@@ -1,29 +1,56 @@
 class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
   enable :placeholder
+
+  attr_accessor :association_controller
   
   def input
     raise ArgumentError, "Autocomplete only works with associations" if reflection.nil?
 
-    field                = options.delete(:autocomplete) || "value"
-    association_name     = reflection.name
-    association_callback = options.delete(:associate) || callback_route
-    association_template = options.delete(:template) || association_name
-    output               = String.new.html_safe
+    @association_controller = options.delete(:controller) || (reflection.klass.model_name.plural + '_controller').classify.constantize
+    field                   = options.delete(:autocomplete) || "value"
+    association_name        = reflection.name
+    association_callback    = options.delete(:associate) || callback_route
+    editable                = options.delete(:editable) || false
+    fields_wrapper          = options.delete(:fields_wrapper) || @builder.options[:wrapper]
+    output                  = String.new.html_safe
+
+    begin
+      controller_association  = association_controller.interrogate_associations(
+        :parent_class => @builder.object.class,
+        :child_class  => reflection.klass)
+    rescue NoMethodError => e
+      e.message "Couldn't interrogate the association, did you add it to the controller?"
+    end
+
+    #update the controller_association with some data from the template
+    #this feels a little bit dirty to me
+    controller_association[:fields_wrapper] = fields_wrapper
 
     # list any existing associations, useing the provided partial
     # falling back to the name of the association
-    binding.pry
-    output.concat @builder.simple_fields_for association_name do |f| 
-      template.render association_template, :f => f
-    end
+    form_field =  ""
 
-    form_field = ActionView::Helpers::InstanceTag.new(object_name, association_name, nil, object).send(:tag_name)
+    if @builder.object.send(association_name).blank?
+      @builder.simple_fields_for association_name, reflection.klass.new do |f|
+        form_field = f.object_name
+      end
+      output.concat(
+        template.content_tag(:div, nil,  
+                             :id    => form_field.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, ""),
+                             :style => 'margin:0;padding:0;display:inline'))
+    else
+      output.concat @builder.simple_fields_for association_name do |f| 
+        form_field = f.object_name
+        template_name = editable ? controller_association[:edit_partial] : controller_association[:partial]
+        template.render(template_name, :f => f)
+      end
+    end
 
     association_data = {
       :name         => association_name,
       :autocomplete => autocomplete_route(field),
       :callback     => association_callback,
-      :field        => form_field
+      :field        => form_field,
     }
 
     if reflection.collection? || !object.send(association_name)
@@ -31,7 +58,7 @@ class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
         :"autocomplete"     => "off",
         :"data-association" => association_data.to_json
       }
-      output.concat(template.text_field_tag("search_#{association_name}", nil, input_html_options.merge(tag_options)))
+      output.concat(template.text_field_tag(controller_association[:field_name], nil, input_html_options.merge(tag_options)))
     end
 
     output
@@ -45,12 +72,9 @@ class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
   end
 
   private
-  def base_route
-        [controller, id, association]
-  end
 
   def autocomplete_route field 
-    controller = reflection.klass.model_name.route_key
+    controller = association_controller.controller_name
     singular = reflection.klass.model_name.singular_route_key
     autocomplete_method = "autocomplete_#{singular}_#{field}"
     "/" + [controller, autocomplete_method].join("/")
@@ -60,13 +84,23 @@ class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
     parent = object.class.model_name.route_key
     id = object.id || 0
     unless reflection.collection? 
-      association = reflection.klass.model_name.singular_route_key
+      association = association_controller.controller_name.singularize
       "/" + ([parent, id, association, 'associate', '#{association_id}']).join('/')
     else
-      association = reflection.klass.model_name.route_key
+      association = association_controller.controller_name.pluralize
       "/" + ([parent, id, association, '#{association_id}', 'associate']).join('/')
     end
   end
+end
+
+module FieldNameAccess
+   def field_id(builder, attribute)
+    "#{builder.object_name}[#{attribute.to_s.sub(/\?$/,"")}]".gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
+   end
+
+   def field_name(builder, attribute)
+     "#{builder.object_name}[#{attribute.to_s.sub(/\?$/,"")}]"
+   end 
 end
 
 module SimpleForm::Components::Destroy

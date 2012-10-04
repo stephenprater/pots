@@ -1,7 +1,6 @@
 class SitesController < ApplicationController
   include ProvidesAssociation
 
-  #needs view_path_prefix and model config
   associates_with :vessell
 
   def autocomplete_site_name

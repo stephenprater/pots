@@ -47,6 +47,9 @@ $ ->
           url: that.association.callback.template(association_id: id)
           data: obj
           dataType: 'script'
+          context: that.element
+          success: ->
+            $(association).associator() for association in $(this).find('*[data-association]')
         )
 
   $.fn.associator = (option)->

@@ -1,7 +1,0 @@
-<% form = capture do %>
-  <% simple_fields_for @field, @child, :index => @child_index do |f| %>
-    <%= render @partial_name, :f => f -%>
-  <% end -%>
-<% end -%>
-
-$('[name="<%= escape_javascript @field %>"]').replace('<%= escape_javascript form %>')

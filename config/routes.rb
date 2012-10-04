@@ -18,6 +18,9 @@ Pots::Application.routes.draw do
     get :autocomplete_vessell_accession_number, :on => :collection
     resource :site, :only => [] do
       get "associate/:id" => 'sites#associate'
+      resource :county, :only => [] do
+        get "associate/:id" => 'counties#associate'
+      end
     end
   end
 
