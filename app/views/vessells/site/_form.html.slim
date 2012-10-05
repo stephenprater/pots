@@ -1,6 +1,8 @@
+
 div.controls.sub-form.form-inline.span6
-  =associated.input :name
-  =associated.input :site_number 
-  =associated.association :county, :autocomplete_on => 'name', :as => 'autocomplete_association'
-  =associated.input :description,
+  =binding.pry
+  =f.input :name
+  =f.input :site_number 
+  =f.association :county, :autocomplete_on => 'name', :as => 'autocomplete_association'
+  =f.input :description,
     :wrapper => :bootstrap_inline_wide, :input_html => { :rows => 2 } 

@@ -1,0 +1,18 @@
+<% form = capture do %>
+  <% simple_fields_for @field, @child, :index => @child_index, :wrapper => :bootstrap_inline do |f| %>
+    <%= yield %>
+  <% end -%>
+<% end -%>
+
+var container = $('#<%= escape_javascript @field_id %>');
+var form = '<%= escape_javascript form %>'
+if(container.text() == "") {
+  container.replaceWith(form);
+}
+else {
+  container.append(form);
+}
+<% unless @reflection.collection? %>
+  $('#<%= escape_javascript @field_name %>').fadeOut();
+<% end %>
+

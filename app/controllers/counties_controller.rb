@@ -1,14 +1,11 @@
 class CountiesController < ApplicationController
   include UpdateMultipleAction
-  include ProvidesAssociation
 
   respond_to :html, :except => :new
   respond_to :js, :only => :new
 
   autocomplete :county, :name
 
-  associates_with :site
- 
   def index
     @counties = County.all
   end

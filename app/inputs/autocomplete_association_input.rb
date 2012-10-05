@@ -6,6 +6,8 @@ class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
   def input
     raise ArgumentError, "Autocomplete only works with associations" if reflection.nil?
 
+    binding.pry
+
     @association_controller = options.delete(:controller) || (reflection.klass.model_name.plural + '_controller').classify.constantize
     field                   = options.delete(:autocomplete) || "value"
     association_name        = reflection.name

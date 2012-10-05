@@ -1,7 +1,12 @@
 class VessellsController < ApplicationController
+  include ProvidesAssociation
+
   respond_to :html
 
   autocomplete :vessell, :accession_number
+
+  associates_with :site
+  associates_with :county, :through => :site
 
   def index
     @vessells = Vessell.paginate(:page => params[:page], :per_page => 20)

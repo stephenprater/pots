@@ -1,7 +1,7 @@
 class SitesController < ApplicationController
   include ProvidesAssociation
 
-  associates_with :vessell
+  provides_association_to :vessell
 
   def autocomplete_site_name
     term = params[:term]
