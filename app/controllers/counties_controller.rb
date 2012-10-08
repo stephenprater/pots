@@ -6,6 +6,8 @@ class CountiesController < ApplicationController
 
   autocomplete :county, :name
 
+  provides_association_to :site
+
   def index
     @counties = County.all
   end

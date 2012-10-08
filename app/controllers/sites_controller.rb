@@ -1,7 +1,7 @@
 class SitesController < ApplicationController
   include ProvidesAssociation
 
-  provides_association_to :vessell
+  provides_association_to :vessells
 
   def autocomplete_site_name
     term = params[:term]
@@ -11,5 +11,10 @@ class SitesController < ApplicationController
     end
     res << {:id => 0, :name => 'New'}
     render :json => res
+  end
+
+  def new
+    @site = Site.new(params)
+    respond_with @site
   end
 end

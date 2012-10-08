@@ -7,6 +7,17 @@ end
 
 module ProvidesAssociation
   extend ActiveSupport::Concern
+
+  class NoAssociationError < StandardError; end
+
+  included do
+    Mime::Type.register_alias 'application/javascript', :association
+    
+    ::ActionController.add_renderer :association do |obj, options|
+      binding.pry
+    end
+  end
+
   module ClassMethods
     def associations
       ControllerAssociationStore.instance
@@ -16,6 +27,10 @@ module ProvidesAssociation
       Rails.logger.debug 'creating parent association'
       klass = controller_name.classify.constantize
       refl = klass.reflect_on_association reflection
+      
+      unless refl
+        raise NoAsssociationError, "Couldn't find association #{reflection}"
+      end
       
       parent_associates_with refl, opts
     end
@@ -27,6 +42,10 @@ module ProvidesAssociation
       end
       klass = controller_name.classify.constantize
       refl = klass.reflect_on_association reflection
+
+      unless refl
+        raise NoAsssociationError, "Couldn't find association #{reflection}"
+      end
       
       child_associates_with refl, opts
     end
@@ -36,14 +55,16 @@ module ProvidesAssociation
       unless associations << assoc
         associations[assoc].merge(assoc)
       end
-      binding.pry
       associations[assoc]
     end
 
-    def interrogate_associations query 
+    def interrogate_associations query = {}
+      unless query.has_key?(:all)
+        query[:parent_class] = controller_name.classify.constantize
+      end
       associations.select do |assoc|
-        query.keys do |k|
-          query[k] === assoc.send(k) and next or break false
+        query.keys.each do |k|
+          query[k] == assoc.send(k) and next or break false
         end and true
       end
     end
@@ -59,10 +80,11 @@ module ProvidesAssociation
       assoc = update_association(reflection.active_record, reflection, options)
 
       if opt[:through]
+        binding.pry
         parent = self.interrogate_associations :name => opt[:through]
         if parent.blank?
-          raise ProvidesAssociation::NoParentAssociation, 
-            "Couldn't find through association #{parent_assoc.name} for #{assoc.name}"
+          raise NoAssociationError, 
+            "Couldn't find through association #{opt[:through]} for #{assoc.name}"
         end
         assoc.parent = parent
       end
@@ -75,7 +97,8 @@ module ProvidesAssociation
         Rails.logger.warn "WARNING: Invalid keys #{opt.keys - options.keys} specified in child controller"
       end
       
-      update_association(reflection.klass, reflection, options)
+      assoc = update_association(reflection.klass, reflection, options)
+      assoc.controller = self
 
       if action = opt.delete(:route)
         self.alias_method action, :associate
@@ -88,13 +111,14 @@ module ProvidesAssociation
     extend ActiveSupport::Concern
 
     included do |target|
-      target.respond_to :js, :only => :associate
+      target.respond_to :association, :only => :associate
       helper_method :association
     end
       
     def associate
       # add the parent class view paths to the lookup context
       association = self.class.associations.select do |s|
+        binding.pry
         s.key_for =~ request.path
       end
       
@@ -111,151 +135,171 @@ module ProvidesAssociation
             obj.send("#{param}=", value)
           end
         end
-        @association = ParticularAssociation.new(assoc, field, child)
-       
-        binding.pry
-        respond_with @association
+        @association = ParticularAssociation.new(assoc, field)
+      
+        self.send @association[:new_action]
       else
         @child = child_class.find(params[:id])
         respond_with @child
       end
     end
   end
-end
 
-class ControllerAssociation
-  attr_accessor  :parent_class, :child_class, :path, :name, :reflection, 
-    :field_name, :edit_partial, :new_partial, :show_partial, :layout
+  class ControllerAssociation
+    attr_accessor  :parent_class, :child_class, :path, :name, :reflection, 
+      :field_name, :edit, :new, :show, :layout, :controller
 
-  attr_accessor  :parent
-  
-  cattr_accessor :compared_values
-  
-  self.compared_values ||= [ :parent_class, :child_class, :path, :name, :reflection, 
-   :field_name, :edit_partial, :show_partial, :new_partial, :layout ]
-
-  def initialize parent, reflection, options = {}
-    child = if reflection.active_record == parent
-      reflection.klass
-    else
-      reflection.active_record
-    end
-
-    self.parent_class = parent
-    self.child_class  = child
-    self.name         = reflection.name
-    self.reflection   = reflection
-    self.path         = options[:path]         || [parent_class.model_name.plural, child_class.model_name.singular].join("/"),
-    self.field_name   = options[:field_name]   || "search_#{reflection.name}",
-    self.edit_partial = options[:edit]         || "edit",
-    self.show_partial = options[:show]         || "show",
-    self.new_partial  = options[:new]          || "new"
-    self.layout       = options[:layout]       || "associate"
-  end
-
-  def association child, field
-    ParticularAssociation.new(self, child, field)
-  end
-
-  def child_index
-    SecureRandom.uuid #or counted index
-  end
-
-  def key_for
-    return @synthetic_key if @synthetic_key
+    attr_accessor  :parent
     
-    ancestors = []
-    p = self 
-    while p = p.parent
-      ancestors.push p
-    end
-    @synthetic_key = [ancestors,hash_key].flatten.join("/")
-  end
+    cattr_accessor :compared_values
+    
+    self.compared_values ||= [ :parent_class, :child_class, :path, :name, :reflection, 
+     :field_name, :edit_partial, :show_partial, :new_partial, :layout ]
 
-  def hash_key
-    #should use the reflection name here and not the
-    #the classnames
-    pk = self.parent_class.model_name.singular
-    ck = if self.reflection.collection?
-      self.child_class.model_name.plural
-    else
-      self.child_class.model_name.singular
-    end
-    [pk, ck]
-  end
-
-  def hash
-    hash_key.join("/").hash
-  end
-
-  def - other
-     @@cmp_values.each_with_object({}) do |o, memo|
-      unless (a = self.send(o)) == (b = other.send(o))
-        memo[o] = [a, b]
+    def initialize parent, reflection, options = {}
+      if reflection.active_record == parent
+        child = reflection.klass
+      else
+        child = reflection.active_record
+        if reflection.has_inverse?
+          reflection = reflection.inverse_of
+        else
+          #guess at the inverse reflection
+          inv = parent.reflect_on_all_associations.select do |r|
+            (r.klass == reflection.active_record) rescue false
+          end
+          unless inv.one?
+            raise NoAssociationError, 
+              "Couldn't guess the inverse association for #{reflection.name}"
+          else
+            reflection = inv.first
+          end
+        end
       end
-     end
-  end
 
-  def merge other
-    @@cmp_values.each do |m|
-      if o = other.send(m)
-        self.send("#{m}=", o)
+      self.parent_class = parent
+      self.child_class  = child
+      self.name         = reflection.name
+      self.reflection   = reflection
+      self.path         = options[:path]         || [parent_class.model_name.plural, child_class.model_name.singular].join("/"),
+      self.field_name   = options[:field_name]   || "search_#{reflection.name}",  #this is not right
+      self.edit         = options[:edit]         || "edit",
+      self.show         = options[:show]         || "show",
+      self.new          = options[:new]          || "new"
+      self.layout       = options[:layout]       || "associate"
+    end
+
+    def association child, field
+      ParticularAssociation.new(self, child, field)
+    end
+
+    def child_index
+      SecureRandom.uuid #or counted index
+    end
+
+    def key_for
+      return @synthetic_key if @synthetic_key
+      
+      ancestors = []
+      p = self 
+      while p = p.parent
+        ancestors.push p
+      end
+      @synthetic_key = [ancestors,hash_key].flatten.join("/")
+    end
+
+    def hash_key
+      #should use the reflection name here and not the
+      #the classnames
+      pk = self.parent_class.model_name.plural
+      ck = if self.reflection.collection?
+        self.child_class.model_name.plural
+      else
+        self.child_class.model_name.singular
+      end
+      [pk, ck]
+    end
+
+    def hash
+      hash_key.join("/").hash
+    end
+
+    def - other
+       @@cmp_values.each_with_object({}) do |o, memo|
+        unless (a = self.send(o)) == (b = other.send(o))
+          memo[o] = [a, b]
+        end
+       end
+    end
+
+    def merge other
+      @@cmp_values.each do |m|
+        if o = other.send(m)
+          self.send("#{m}=", o)
+        end
       end
     end
-  end
-
-  def action action
-    self.send("#{action}_partial")
-  end
-end
-
-class ParticularAssociation < DelegateClass(ControllerAssociation)
-  attr_accessor :field, :child
-  def initialize assoc, field, child
-    super(assoc)
-    @field = field
-    @child = child
-  end
-
-  def field_id
-    @field_id ||= @field.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
-  end
-end
-
-class ControllerAssociationStore
-  include Enumerable
-  include Singleton
-
-  class QuasiSet < Set
-    def add(o)
-      @hash[o] = o
-      o
-    end
-
-    def get(o)
-      @hash[o]
+   
+    def action action
+      self.send("#{action}_partial")
     end
   end
 
-  cattr_accessor :associations, :mutex
+  class ParticularAssociation < DelegateClass(ControllerAssociation)
+    attr_accessor :field, :child
+    attr_accessor :index
 
-  self.associations = QuasiSet.new
-  self.mutex = Mutex.new
-  
-  # returns nil if the association already exists
-  def << assoc
-    mutex.synchronize do
-      associations.add? assoc
+    def initialize assoc, field
+      super(assoc)
+      @field = field
+    end
+
+    def field_id
+      @field_id ||= @field.gsub(/\]\[|[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
+    end
+
+    def index
+      @index ? @index : SecureRandom.uuid
     end
   end
 
-  def [] assoc
-    associations.get(assoc)
-  end
+  class ControllerAssociationStore
+    include Enumerable
+    include Singleton
 
-  def each &block
-    associations.each do |v|
-      yield v
+    # it's called a quasiset because it's not really
+    # a proper set - the equality test is s
+    class QuasiSet < Set
+      def add(o)
+        @hash[o] = o
+        o
+      end
+
+      def get(o)
+        @hash[o]
+      end
+    end
+
+    cattr_accessor :associations, :mutex
+
+    self.associations = QuasiSet.new
+    self.mutex = Mutex.new
+    
+    # returns nil if the association already exists
+    def << assoc
+      mutex.synchronize do
+        associations.add? assoc
+      end
+    end
+
+    def [] assoc
+      associations.get(assoc)
+    end
+
+    def each &block
+      associations.each do |v|
+        yield v
+      end
     end
   end
 end

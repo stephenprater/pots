@@ -6,8 +6,6 @@ class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
   def input
     raise ArgumentError, "Autocomplete only works with associations" if reflection.nil?
 
-    binding.pry
-
     @association_controller = options.delete(:controller) || (reflection.klass.model_name.plural + '_controller').classify.constantize
     field                   = options.delete(:autocomplete) || "value"
     association_name        = reflection.name
@@ -17,16 +15,11 @@ class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
     output                  = String.new.html_safe
 
     begin
-      controller_association  = association_controller.interrogate_associations(
-        :parent_class => @builder.object.class,
-        :child_class  => reflection.klass)
+      controller_association  = association_controller.interrogate_associations(:name => association_name)
+      binding.pry
     rescue NoMethodError => e
       e.message "Couldn't interrogate the association, did you add it to the controller?"
     end
-
-    #update the controller_association with some data from the template
-    #this feels a little bit dirty to me
-    controller_association[:fields_wrapper] = fields_wrapper
 
     # list any existing associations, useing the provided partial
     # falling back to the name of the association
@@ -43,7 +36,7 @@ class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
     else
       output.concat @builder.simple_fields_for association_name do |f| 
         form_field = f.object_name
-        template_name = editable ? controller_association[:edit_partial] : controller_association[:partial]
+        template_name = editable ? controller_association.edit : controller_association.show
         template.render(template_name, :f => f)
       end
     end
@@ -60,7 +53,7 @@ class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
         :"autocomplete"     => "off",
         :"data-association" => association_data.to_json
       }
-      output.concat(template.text_field_tag(controller_association[:field_name], nil, input_html_options.merge(tag_options)))
+      output.concat(template.text_field_tag(controller_association.field_name, nil, input_html_options.merge(tag_options)))
     end
 
     output
