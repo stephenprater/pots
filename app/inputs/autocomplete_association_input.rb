@@ -16,7 +16,6 @@ class AutocompleteAssociationInput < SimpleForm::Inputs::CollectionInput
 
     begin
       controller_association  = association_controller.interrogate_associations(:name => association_name)
-      binding.pry
     rescue NoMethodError => e
       e.message "Couldn't interrogate the association, did you add it to the controller?"
     end

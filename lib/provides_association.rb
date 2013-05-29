@@ -14,7 +14,7 @@ module ProvidesAssociation
     Mime::Type.register_alias 'application/javascript', :association
     
     ::ActionController.add_renderer :association do |obj, options|
-      binding.pry
+      #okay 
     end
   end
 
@@ -80,7 +80,6 @@ module ProvidesAssociation
       assoc = update_association(reflection.active_record, reflection, options)
 
       if opt[:through]
-        binding.pry
         parent = self.interrogate_associations :name => opt[:through]
         if parent.blank?
           raise NoAssociationError, 
@@ -118,7 +117,6 @@ module ProvidesAssociation
     def associate
       # add the parent class view paths to the lookup context
       association = self.class.associations.select do |s|
-        binding.pry
         s.key_for =~ request.path
       end
       
